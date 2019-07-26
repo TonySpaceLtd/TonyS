@@ -14,9 +14,11 @@ byte workingDevice = 0x00;
 
 void TonyS_X1::begin() 
 {
+	onPower();
+	delay(500);
 	Wire.begin();
 	checkIC();
-	onPower();
+	
 	IO.Real_pinMode(LED_BUILTIN, OUTPUT); // ------- Set to OUTPUT
 	pinMode(IO14, OUTPUT); //----  Set Pin IO14 (Relay 1) to OUTPUT
 	pinMode(IO15, OUTPUT); //----  Set Pin IO15 (Relay 2) to OUTPUT
