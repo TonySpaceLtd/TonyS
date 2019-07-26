@@ -1,6 +1,5 @@
 #include <TonyS_X1.h>
 
-TonyS_X1 Tony;   //  Call Library's class
 MAX11301 MAX;    //  Call Library's class
 
 uint8_t pinADC[12] = {AIO0, AIO1, AIO2, AIO3, AIO4, AIO5, AIO6, AIO7, AIO8, AIO9, AIO10, AIO11};
