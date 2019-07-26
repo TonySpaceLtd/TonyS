@@ -9,7 +9,8 @@
 
 #define  LED_BUILTIN    115   //  Pin IO24 = LED Build in
 #define  powerPin       102    //  Pin IO25 = ON-OFF Power
-//
+
+
 class TonyS_X1
 {
 public:
@@ -26,6 +27,11 @@ public:
 private:
 	
 };
+
+static void pinMode(uint8_t pin,uint8_t mode)
+{
+	
+}
 #endif
 
 
