@@ -46,5 +46,17 @@ static const uint8_t IO15 = 19; // ON-OFF Relay 2
 static const uint8_t Relay_1 = IO14; // ON-OFF Relay 1
 static const uint8_t Relay_2 = IO15; // ON-OFF Relay 2
 
+#define  SLOT1    		0
+#define  SLOT1_U    	1
+#define  SLOT2    		2
+#define  SLOT2_U    	3
+#define  SLOT3    		4
+#define  SLOT3_U    	5
+#define  SLOT4    		6
+#define  SLOT4_U    	7
+#define  SLOT5    		8
+#define  SLOT5_U    	9
+#define  SLOT6    		10
+#define  SLOT6_U    	11
 
 #endif /* TonySpace_Pins_h */

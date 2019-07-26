@@ -26,6 +26,9 @@ Adafruit_ST7789::Adafruit_ST7789(int8_t cs, int8_t dc, int8_t rst) :
   Adafruit_ST77xx(320, 240, cs, dc, rst) {
 }
 
+
+
+
 #if !defined(ESP8266)
 /*!
     @brief  Instantiate Adafruit ST7789 driver with selectable hardware SPI
