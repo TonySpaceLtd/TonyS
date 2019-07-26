@@ -2,6 +2,7 @@
 #ifndef TonyS_X1_h
 #define TonyS_X1_h
 
+#include <Wire.h>
 #include "TonySpace_MAX11301.h"
 #include "TonySpace_Pins.h"
 #include "TonySpace_IO.h"
