@@ -1,6 +1,5 @@
 #include <TonyS_X1.h>
 
-TonyS_X1 Tony;   //  Call Library's class
 MAX11301 MAX;    //  Call Library's class
 
 float count = 0;
