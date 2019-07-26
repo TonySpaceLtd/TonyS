@@ -18,7 +18,7 @@ public:
 	void digitalWrite(uint8_t pin, bool value);
 	bool digitalRead(uint8_t pin);
 	uint16_t analogRead(uint8_t pin);
-	void analogWrite(uint8_t pin, float Output); // Output 0-10V
+	void analogWrite(uint8_t pin, uint16_t Output); // Output 0-10V
 	void onPower(); // On power on board
 	void offPower(); // Off power on board
 	void checkIC(); // Check working IC on board

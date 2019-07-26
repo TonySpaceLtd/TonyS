@@ -101,7 +101,7 @@ bool TonyS_X1::digitalRead(uint8_t pin)
 
 uint16_t TonyS_X1::analogRead(uint8_t pin)
 {
-	float dataADC = 0;
+	uint16_t dataADC = 0;
 	if(pin <= 19)
 	{
 		MAX11301.Basic_Config_Port(pin, ADCtype1);  // Config Port (pin) to ADC 0-10V
@@ -114,7 +114,7 @@ uint16_t TonyS_X1::analogRead(uint8_t pin)
 	return(dataADC);
 }
 
-void TonyS_X1::analogWrite(uint8_t pin, float Output)
+void TonyS_X1::analogWrite(uint8_t pin, uint16_t Output)
 {
 	MAX11301.Basic_Config_Port(pin, DACtype); 
 	MAX11301.writeDAC(pin, Output);  //Output 0-10V
