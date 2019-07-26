@@ -1,5 +1,7 @@
 #include "TonyS_X1.h"
 
+TonyS_X1 Tony;
+
 TonyS_X1::TonyS_X1()
 {
 	
@@ -12,6 +14,7 @@ byte workingDevice = 0x00;
 
 void TonyS_X1::begin() 
 {
+	Wire.begin();
 	checkIC();
 	onPower();
 	IO.Real_pinMode(LED_BUILTIN, OUTPUT); // ------- Set to OUTPUT

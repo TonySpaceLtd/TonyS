@@ -37,4 +37,13 @@ static const uint8_t IO14 = 18; // ON-OFF Relay 1
 static const uint8_t IO15 = 19; // ON-OFF Relay 2
 
 
+
+#define  LED_BUILTIN    IO12   //  Pin IO24 = LED Build in
+#define  POWER_PIN      IO13   //  Pin IO25 = ON-OFF Power
+#define  powerPin       IO13  
+
+static const uint8_t Relay_1 = IO14; // ON-OFF Relay 1
+static const uint8_t Relay_2 = IO15; // ON-OFF Relay 2
+
+
 #endif /* TonySpace_Pins_h */

@@ -7,8 +7,6 @@
 #include "TonySpace_IO.h"
 #include "TonySpace_Plugin.h"
 
-#define  LED_BUILTIN    115   //  Pin IO24 = LED Build in
-#define  powerPin       102    //  Pin IO25 = ON-OFF Power
 
 
 class TonyS_X1
@@ -27,11 +25,7 @@ public:
 private:
 	
 };
-
-static void pinMode(uint8_t pin,uint8_t mode)
-{
-	
-}
+extern TonyS_X1 Tony;
 #endif
 
 
