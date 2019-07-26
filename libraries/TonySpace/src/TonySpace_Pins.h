@@ -29,6 +29,7 @@ static const uint8_t IO7 = 13;
 static const uint8_t IO8 = 14;	
 static const uint8_t IO9 = 15;	
 static const uint8_t IO10 = 104; //Real = 4
+static const uint8_t IO_CS = 105; //Real = 5
 static const uint8_t IO11 = 113; //Real = 13
 
 static const uint8_t IO12 = 115;// LED_BUILTIN
