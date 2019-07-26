@@ -1,6 +1,6 @@
 #include "Adafruit_ST77xx.h"
 #include "Adafruit_ST7789.h"
-
+#include <TonyS_X1.h>
 // CONSTRUCTORS ************************************************************
 
 /*!
@@ -26,6 +26,57 @@ Adafruit_ST7789::Adafruit_ST7789(int8_t cs, int8_t dc, int8_t rst) :
   Adafruit_ST77xx(320, 240, cs, dc, rst) {
 }
 
+uint8_t find_cs(uint8_t slot)
+{
+	return IO_CS;
+}
+uint8_t find_dc(uint8_t slot)
+{
+	switch(slot)
+	{
+		case  SLOT1 :
+			return IO0;
+		case  SLOT2 :
+			return IO2;
+		case  SLOT3 :
+			return IO4;
+		case  SLOT4 :
+			return IO6;
+		case  SLOT5 :
+			return IO8;
+		case  SLOT6 :
+			return IO10;
+	}
+	return -1;
+	
+}
+uint8_t find_rst(uint8_t slot)
+{
+	switch(slot)
+	{
+		case  SLOT1 :
+			return IO1;
+		case  SLOT2 :
+			return IO3;
+		case  SLOT3 :
+			return IO5;
+		case  SLOT4 :
+			return IO7;
+		case  SLOT5 :
+			return IO9;
+		case  SLOT6 :
+			return IO11;
+	}
+	
+	return -1;
+}
+
+
+Adafruit_ST7789::Adafruit_ST7789(int8_t slot) :
+Adafruit_ST77xx(320, 240,find_cs(slot),find_dc(slot),find_rst(slot)) 
+{
+	
+}
 
 
 
