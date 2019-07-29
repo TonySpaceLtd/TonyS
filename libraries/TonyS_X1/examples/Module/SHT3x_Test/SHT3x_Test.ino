@@ -9,13 +9,12 @@
  ****************************************************/
  #include <TonyS_X1.h>
 #include <Arduino.h>
-#include <Wire.h>
 #include "Adafruit_SHT31.h"
 
 Adafruit_SHT31 sht31 = Adafruit_SHT31();
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
  Tony.begin();  //----  begin Library
   Serial.println("SHT31 test");
   if (! sht31.begin(0x44)) {   // Set to 0x45 for alternate i2c addr

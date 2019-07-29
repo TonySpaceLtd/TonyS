@@ -64,7 +64,6 @@ void setup()
 {
   
   Serial.begin(115200);
-  Wire.begin();
   Tony.begin();  //----  begin Library
   delay(10);
 
