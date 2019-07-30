@@ -174,4 +174,10 @@ void TonyS_X1::checkIC()
 		Serial.println("MAX11301)   = ON");
 		workingDevice = 0x01;
 	}
+	else if(rtcDevices == 0 && maxDevices == 0)
+	{
+		Serial.println("RTC(DS3231) = OFF");
+		Serial.println("MAX11301)   = OFF");
+		workingDevice = 0x00;
+	}
 }
