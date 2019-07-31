@@ -1,7 +1,6 @@
-#include <TonyS_X1.h>
+#include "TonyS_X1.h"
 
 MAX11301 MAX;    //  Call Library's class
-
 
 void setup() 
 {
