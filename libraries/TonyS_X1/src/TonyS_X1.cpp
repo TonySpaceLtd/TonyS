@@ -14,8 +14,9 @@ byte workingDevice = 0x00;
 
 void TonyS_X1::begin() 
 {
-	onPower();
 	delay(500);
+	onPower();
+	delay(1000);
 	Wire.begin();
 	checkIC();
 	
@@ -123,13 +124,15 @@ void TonyS_X1::analogWrite(uint8_t pin, uint16_t Output)
 void TonyS_X1::onPower()
 {
 	IO.Real_pinMode(powerPin, OUTPUT); // ------- Set to OUTPUT
-	IO.Real_digitalWrite(powerPin, HIGH);  //---- HIGH for ON Board's power
+	IO.Real_digitalWrite(powerPin, HIGH);
 }
 
 void TonyS_X1::offPower()
 {
 	IO.Real_pinMode(powerPin, OUTPUT); // ------- Set to OUTPUT
 	IO.Real_digitalWrite(powerPin, LOW);  //---- HIGH for ON Board's power
+	//IO.Real_pinMode(2, OUTPUT); // ------- Set to OUTPUT
+	//IO.Real_digitalWrite(2, LOW);  //---- HIGH for ON Board's power
 }
 
 void TonyS_X1::checkIC()
