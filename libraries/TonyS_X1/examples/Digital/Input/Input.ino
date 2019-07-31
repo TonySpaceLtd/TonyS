@@ -1,8 +1,5 @@
 #include <TonyS_X1.h>
 
-TonyS_X1 Tony;   //  Call Library's class
-
-
 void setup() 
 {
   Serial.begin(115200);

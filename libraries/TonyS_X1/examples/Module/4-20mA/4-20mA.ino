@@ -1,32 +1,31 @@
-//---------- Select Slot for plug-in breakout board -----------//
-#define  T4_20mA_Floor1     //-----  Select T4_20mA_Floor1(Floor 1) or T4_20mA_Floor2(Floor 2)    
-#define  T4_20mA_Slot    1 // ----  Selec Slot 1-6
-//-------------------------------------------------------------//
+#include <TonyS_X1.h>
+#include <TonySpace_4_20mA.h>
 
-#include <TonyS1.h>
-#include <TonyS1_Breakout.h>
-
-TONY_S1 Tony;   //  Call Library's class
-#define  Power   2   //  Pin 2 for control ON-OFF power
+T4_20mA  T4_20mA(SLOT1);   //  Select slot such as SLOT1, SLOT1_U, SLOT2, SLOT2_U, SLOT3, SLOT3_U ...
+                           //   SLOTx_U = Floor 2
 
 void setup() 
 {
   Serial.begin(115200);
-  Serial.println("TonyS1 Example");
-  Wire.begin();
-  
+  Serial.println("TonyS_X1 Example");
   Tony.begin();  //----  begin Library
   delay(10);
-
-  pinMode(Power, OUTPUT); // ------- Set to OUTPUT
-  digitalWrite(Power, HIGH);  //---- HIGH for ON Board's power
 }
 
 void loop() 
 {
-  float dataADC = 0;
-  dataADC = Tony.analogRead(T4_20mA_Port);   //---- Read analog from pin 0 (Range 0-10V)
+  float milliamp = 0;
+  uint16_t value = 0;
+  
+  value = T4_20mA.readValue();
   Serial.print("Value = ");
-  Serial.println(dataADC,3);     
-  delay(1000); 
+  Serial.println(value); 
+
+  //----- Convert value to mA ------//
+  milliamp = value/62.80;  //  1mA = 62.80   Calculate analog to voltage 
+  Serial.print("Current = ");
+  Serial.print(milliamp, 3);  
+  Serial.println(" mA");  
+  Serial.println();  
+  delay(500); 
 }
