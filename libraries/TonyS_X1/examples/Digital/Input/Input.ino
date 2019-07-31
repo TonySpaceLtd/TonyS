@@ -1,10 +1,9 @@
-#include <TonyS_X1.h>
+#include "TonyS_X1.h"
 
 void setup() 
 {
   Serial.begin(115200);
   Serial.println("TonyS_X1 Example");
-  Wire.begin();
   
   Tony.begin();  //----  begin Library
   delay(10);
