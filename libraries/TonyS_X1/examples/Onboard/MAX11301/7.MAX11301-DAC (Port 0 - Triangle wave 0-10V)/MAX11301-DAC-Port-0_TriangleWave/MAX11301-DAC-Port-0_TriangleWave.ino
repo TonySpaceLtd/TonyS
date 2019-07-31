@@ -1,11 +1,10 @@
-#include <TonyS_X1.h>
+#include "TonyS_X1.h"
 
 MAX11301 MAX;    //  Call Library's class
 
 float count = 0;
 float addPoint = 1;
 uint16_t updown = 0;
-
 
 void setup() 
 {
