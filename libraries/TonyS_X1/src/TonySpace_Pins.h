@@ -37,7 +37,10 @@ static const uint8_t IO13 = 102; // ON-OFF Board's Power
 static const uint8_t IO14 = 18; // ON-OFF Relay 1
 static const uint8_t IO15 = 19; // ON-OFF Relay 2
 
-
+#define  RX1  		    34   
+#define  TX1  		    32   
+#define  RX2  		    35   
+#define  TX2  		    33 
 
 #define  LED_BUILTIN    IO12   //  Pin IO24 = LED Build in
 #define  POWER_PIN      IO13   //  Pin IO25 = ON-OFF Power
