@@ -2,7 +2,7 @@
 #include <Adafruit_GFX.h>    // Core graphics library
 #include <Adafruit_ST7789.h> // Hardware-specific library for ST7789
 #include <SPI.h>
-#include "lvgl/lv_examples/lv_apps/demo/demo.h"
+
 // For 1.54" and 2.0" TFT with ST7789:
 Adafruit_ST7789 tft = Adafruit_ST7789(SLOT1);
 float p = 3.1415926;
