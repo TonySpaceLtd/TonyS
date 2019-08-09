@@ -1,7 +1,5 @@
 #include "TonyS_X1.h"
-#include <Adafruit_GFX.h>    // Core graphics library
-#include <Adafruit_ST7789.h> // Hardware-specific library for ST7789
-#include <SPI.h>
+#include "TonyS_X1_ExternalModule.h"
 
 // For 1.54" and 2.0" TFT with ST7789:
 Adafruit_ST7789 tft = Adafruit_ST7789(SLOT1);
@@ -10,14 +8,13 @@ float p = 3.1415926;
 void setup(void) {
   Serial.begin(9600);
   Serial.print(F("Hello! ST77xx TFT Test"));
-  Tony.begin();  //----  begin Library
+  Tony.begin();  //----  begin Library   
   tft.init(240, 240);           // Init ST7789 240x240
   tft.setRotation(3);
   Serial.println(F("Initialized"));
   uint16_t time = millis();
   tft.fillScreen(ST77XX_BLACK);
   time = millis() - time;
-
   Serial.println(time, DEC);
   delay(500);
 

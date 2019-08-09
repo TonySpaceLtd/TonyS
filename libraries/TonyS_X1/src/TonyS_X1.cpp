@@ -35,7 +35,7 @@ void TonyS_X1::begin()
 
 void TonyS_X1::pinMode(uint8_t pin, uint8_t type)
 {
-	if(pin <= 19)
+	if(pin <= 19)   
 	{	
 		if(workingDevice == 0x01 || workingDevice == 0x11)
 		{
@@ -183,4 +183,15 @@ void TonyS_X1::checkIC()
 		Serial.println("MAX11301)   = OFF");
 		workingDevice = 0x00;
 	}
+}
+HardwareSerial TonyS_X1:: SerialBegin(uint8_t slot,unsigned long baud, uint32_t config, int8_t rxPin, int8_t txPin, bool invert, unsigned long timeout_ms) 
+{		
+	if(slot <=SLOT3_U)
+	{
+		Serial1.begin(baud,config,RX1,TX1,invert,timeout_ms);
+		return(Serial1);
+	}
+	Serial2.begin(baud,config,RX2,TX2,invert,timeout_ms);
+	return(Serial2);
+	
 }

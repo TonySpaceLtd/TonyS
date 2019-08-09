@@ -1,6 +1,5 @@
 // Date and time functions using a DS3231 RTC connected via I2C and Wire lib
 #include "TonyS_X1.h"
-#include "RTClib.h"
 
 RTC_DS3231 rtc;
 
