@@ -1,12 +1,8 @@
 #include "TonyS_X1.h"
-#include "littlevglESP32.h"
-#include <Adafruit_GFX.h>   
-#include <Adafruit_ST7789.h> 
+#include "TonyS_X1_ExternalModule.h"
 #include "display.h"
-#include "RTClib.h"
 #include <SPI.h>
 #include <Wire.h>
-#include "Adafruit_SHT31.h"
 Adafruit_ST7789 tft = Adafruit_ST7789(SLOT1);
 RTC_DS3231 rtc;
 Adafruit_SHT31 sht31 = Adafruit_SHT31();
@@ -50,5 +46,4 @@ void loop()
      setlabel(str);
      previousClock = millis();
   }
-  
 }

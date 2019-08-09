@@ -1,4 +1,3 @@
-
 #ifndef TonyS_X1_h
 #define TonyS_X1_h
 
@@ -24,6 +23,8 @@ public:
 	void onPower(); // On power on board
 	void offPower(); // Off power on board
 	void checkIC(); // Check working IC on board
+	bool isrtc_rdy();
+	bool ismax_rdy();
 	 
 	HardwareSerial SerialBegin(uint8_t slot,unsigned long baud,uint32_t config=SERIAL_8N1, int8_t rxPin=-1, int8_t txPin=-1, bool invert=false, unsigned long timeout_ms = 20000UL); //Serial
 	

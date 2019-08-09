@@ -27,7 +27,7 @@ void TonyS_X1::begin()
 	digitalWrite(IO14, LOW); //---- Write LOW to pin IO14 (Relay 1)
 	digitalWrite(IO15, LOW); //---- Write LOW to pin IO15 (Relay 2)
 	
-	if(workingDevice == 0x01 || workingDevice == 0x11)
+	if((workingDevice & 0x01) == 0x01)
 	{
 		MAX11301.Config_deviceControl(); 
 	}
@@ -37,7 +37,7 @@ void TonyS_X1::pinMode(uint8_t pin, uint8_t type)
 {
 	if(pin <= 19)   
 	{	
-		if(workingDevice == 0x01 || workingDevice == 0x11)
+		if(ismax_rdy())
 		{
 			if(type == INPUT)
 			{
@@ -51,14 +51,14 @@ void TonyS_X1::pinMode(uint8_t pin, uint8_t type)
 			{
 				Serial.println();
 				Serial.println("This pin not support INPUT_PULLUP mode.");
-				Serial.println("Please select only pin IO0 ,IO1, IO4 ,IO5 , IO20 and IO21.");
+				Serial.println("Please select only pin IO0, IO1, IO2, IO3, IO10 and IO11.");
 			}
 		}
 		else
 		{
 			Serial.println();
 			Serial.println("MAX11301 not available !.");
-			Serial.println("Please select only pin IO0 ,IO1, IO4 ,IO5 , IO20 and IO21.");
+			Serial.println("Please select only pin IO0, IO1, IO2, IO3, IO10 and IO11.");
 		}
 	}
 	else
@@ -131,25 +131,21 @@ void TonyS_X1::offPower()
 {
 	IO.Real_pinMode(powerPin, OUTPUT); // ------- Set to OUTPUT
 	IO.Real_digitalWrite(powerPin, LOW);  //---- HIGH for ON Board's power
-	//IO.Real_pinMode(2, OUTPUT); // ------- Set to OUTPUT
-	//IO.Real_digitalWrite(2, LOW);  //---- HIGH for ON Board's power
 }
 
 void TonyS_X1::checkIC()
 {
 	Wire.begin();
 	byte error;
-	byte check_addrMAX11301 = 0x38;
 	byte check_addrRTC = 0x68;
-	int maxDevices = 0;
-	int rtcDevices = 0;
+	byte check_addrMAX11301 = 0x38;
 	
 	Serial.println("Checking IC on board...");
 	Wire.beginTransmission(check_addrRTC);
 	error = Wire.endTransmission();
 	if(error == 0)
 	{
-		rtcDevices = 1;
+		workingDevice |= 0x10;
 	}
 	delay(10);
 
@@ -157,33 +153,60 @@ void TonyS_X1::checkIC()
 	error = Wire.endTransmission();
 	if(error == 0)
 	{
-		maxDevices = 1;
+		workingDevice |= 0x01;
 	}
-	if(rtcDevices == 1 && maxDevices == 1)
-	{
-		Serial.println("RTC(DS3231) = ON");
-		Serial.println("MAX11301)   = ON");
-		workingDevice = 0x11;
-	}
-	else if(rtcDevices == 1 && maxDevices == 0)
-	{
-		Serial.println("RTC(DS3231) = ON");
-		Serial.println("MAX11301)   = OFF");
-		workingDevice = 0x10;
-	}
-	else if(rtcDevices == 0 && maxDevices == 1)
-	{
-		Serial.println("RTC(DS3231) = OFF");
-		Serial.println("MAX11301)   = ON");
-		workingDevice = 0x01;
-	}
-	else if(rtcDevices == 0 && maxDevices == 0)
-	{
-		Serial.println("RTC(DS3231) = OFF");
-		Serial.println("MAX11301)   = OFF");
-		workingDevice = 0x00;
-	}
+	
+	Serial.print(F("RTC(DS3231) = "));
+	Serial.println(((workingDevice & 0x10) == 0x10)? "ON":"OFF");
+	
+	Serial.print(F("MAX11301    = "));
+	Serial.println(((workingDevice & 0x01) == 0x01)? "ON":"OFF");
 }
+
+bool TonyS_X1::isrtc_rdy()
+{
+	if((workingDevice & 0x10) == 0x10)
+	{
+		return(true);
+	}
+	else	// recheck RTC
+	{
+		byte error;
+		byte check_addrRTC = 0x68;
+		
+		Wire.beginTransmission(check_addrRTC);
+		error = Wire.endTransmission();
+		if(error == 0)
+		{
+			workingDevice |= 0x10;
+			return(true);
+		}
+	}
+	return(false);
+}
+
+bool TonyS_X1::ismax_rdy()
+{
+	if((workingDevice & 0x01) == 0x01)
+	{
+		return(true);
+	}
+	else	// recheck MAX
+	{
+		byte error;
+		byte check_addrMAX11301 = 0x38;
+		
+		Wire.beginTransmission(check_addrMAX11301);
+		error = Wire.endTransmission();
+		if(error == 0)
+		{
+			workingDevice |= 0x01;
+			return(true);
+		}
+	}
+	return(false);
+}
+
 HardwareSerial TonyS_X1:: SerialBegin(uint8_t slot,unsigned long baud, uint32_t config, int8_t rxPin, int8_t txPin, bool invert, unsigned long timeout_ms) 
 {		
 	if(slot <=SLOT3_U)
