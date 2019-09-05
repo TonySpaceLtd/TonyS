@@ -10,5 +10,13 @@
 #include "Module/Display/Adafruit_ST7735_and_ST7789_Library/Adafruit_ST7789.h" // Hardware-specific library for ST7789
 #include "Module/Display/littlevglESP32/src/littlevglESP32.h";
 
+#include "Module/NBIoT/TonySpace_NBIoT.h"
+#include "Module/NBIoT/TonySpace_NBIoT_TCP.h"
+#include "Module/NBIoT/TonySpace_NBIoT_UDP.h"
+#include "Module/NBIoT/TonySpace_NBIoT_MQTT.h"
+#include "Module/NBIoT/Magellan.h"
+
+#include "Module/Maxsonar/TonySpace_Maxsonar.h"
+
 
 #endif
