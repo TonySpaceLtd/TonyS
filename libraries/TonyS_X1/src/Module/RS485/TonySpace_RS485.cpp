@@ -7,7 +7,7 @@
 
 
 #if !defined(NO_GLOBAL_INSTANCES) && !defined(NO_GLOBAL_SERIAL)
-Tony_RS485 RS485(0);
+Tony_RS485 RS485(2);
 #endif
 
 void Tony_RS485::slot(uint8_t slot)
