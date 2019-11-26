@@ -7,7 +7,7 @@ MAX11301::MAX11301()
 
 }
 
-int16_t DAC_Compensate = 0;  //---- For adjust DAC Output
+int DAC_Compensate = 0;  //---- For adjust DAC Output
 
 
 void MAX11301::Command_Config()
