@@ -38,20 +38,23 @@ static const uint8_t IO_CLK = 118;  //Real = 18
 
 static const uint8_t IO12 = 115;// LED_BUILTIN
 static const uint8_t IO13 = 102; // ON-OFF Board's Power
-static const uint8_t IO14 = 18; // ON-OFF Relay 1
-static const uint8_t IO15 = 19; // ON-OFF Relay 2
+static const uint8_t IO14 = 112; // ON-OFF MAX11301's Power
+static const uint8_t IO15 = 18; // ON-OFF Relay 1
+static const uint8_t IO16 = 19; // ON-OFF Relay 2
 
 #define  RX1  		    34   
 #define  TX1  		    32   
 #define  RX2  		    35   
 #define  TX2  		    33 
 
-#define  LED_BUILTIN    IO12   //  Pin IO24 = LED Build in
-#define  POWER_PIN      IO13   //  Pin IO25 = ON-OFF Power
+#define  LED_BUILTIN    IO12   //  Pin IO12 = LED Build in
+#define  POWER_PIN      IO13   //  Pin IO13 = ON-OFF Power
 #define  powerPin       IO13  
+#define  POWER_MAX11301 IO14   //  Pin IO14 = ON-OFF MAX11301 Power
+#define  powerMAX11301  IO14   //  Pin IO14 = ON-OFF MAX11301 Power
 
-static const uint8_t Relay_1 = IO14; // ON-OFF Relay 1
-static const uint8_t Relay_2 = IO15; // ON-OFF Relay 2
+static const uint8_t Relay_1 = IO15; // ON-OFF Relay 1
+static const uint8_t Relay_2 = IO16; // ON-OFF Relay 2
 
 #define  SLOT1    		0
 #define  SLOT1_U    	1
