@@ -10,7 +10,7 @@ MAX11301::MAX11301()
 int16_t DAC_Compensate = 0;  //---- For adjust DAC Output
 
 
-void MAX11301::Config_deviceControl()
+void MAX11301::Command_Config()
 {
 	//------ Clear GPO Ouput -------//
 	Wire.beginTransmission(ADDRMAX11301);
@@ -50,32 +50,60 @@ void MAX11301::Config_deviceControl()
     Wire.write(Data_2);
     Wire.endTransmission();
 	delay(40);
+	
+	defaultConfig();
+	delay(100);
+}
+
+void MAX11301::Config_deviceControl()
+{
+	delay(200);
+	Command_Config();
 
 	//------ Adjust DAC Compensate Value -------//
-	Basic_Config_Port_For_DACADC(0, 1024);  // Config Port 0 to DAC with monitoring  (1024 = 2.5V)
+	Basic_Config_Port_For_DACADC(19, 1024);  // Config Port 0 to DAC with monitoring  (1024 = 2.5V)
+	writeDAC(19, 1024);  // 1024 = 2.5V
 	delay(100);
 	uint16_t dataADC = 0;
 	for(uint8_t i=0; i<200; i++)
 	{
 		float Voltage = 0;
-		dataADC = readADC(0);  // Read ADC from port 0 (DAC Output)
+		dataADC = readADC(19);  // Read ADC from port 0 (DAC Output)
 		Voltage = float(10.0/4095)*dataADC;
-		if(Voltage < 2.48)
+		if(Voltage < 2.50)
 		{
 			DAC_Compensate++;
 		}
-		else if(Voltage > 2.50)
+		else if(Voltage > 2.52)
 		{
 			DAC_Compensate--;
 		}
-		else if(Voltage > 2.48 && Voltage < 2.50)
+		else if(Voltage > 2.50 && Voltage < 2.52)
 		{
+			Serial.println("Default Config Success !");
 			break;
 		}
-		writeDAC(0, 1024);  // 1024 = 2.5V
+		
+		writeDAC(19, 1024);  // 1024 = 2.5V
+		
+		if(i%40 == 0)
+		{
+			//DAC_Compensate = 0;
+			Tony.offMAX11301();
+			delay(200);
+			Tony.onMAX11301();
+			delay(200);
+			Command_Config();
+			Basic_Config_Port_For_DACADC(19, 1024);  // Config Port 19 to DAC with monitoring  (1024 = 2.5V)
+			writeDAC(19, 1024);  // 1024 = 2.5V
+			delay(100);
+			Serial.println("Reset MAX11301");
+		}
 		delay(10);
+		
 		if(i >= 199)
 		{
+			DAC_Compensate = 0;
 			Serial.println("Can't calibrate compensate value !");
 		}
 	}
@@ -86,98 +114,65 @@ void MAX11301::Config_deviceControl()
 
 void MAX11301::defaultConfig()
 {
-	Serial.println("Config Port 0 to ADC 0-10V");
 	Basic_Config_Port(0, ADCtype1);
-	Serial.println("Success !");
-	delay(100);
+	delay(10);
 
-	Serial.println("Config Port 1 to ADC 0-10V");
 	Basic_Config_Port(1, ADCtype1);
-	Serial.println("Success !");
-	delay(100);
+	delay(10);
 
-	Serial.println("Config Port 2 to ADC 0-10V");
 	Basic_Config_Port(2, ADCtype1);
-	Serial.println("Success !");
-	delay(100);
+	delay(10);
 
-	Serial.println("Config Port 3 to ADC 0-10V");
 	Basic_Config_Port(3, ADCtype1);
-	Serial.println("Success !");
-	delay(100);
+	delay(10);
 
-	Serial.println("Config Port 4 to ADC 0-10V");
 	Basic_Config_Port(4, ADCtype1);
-	Serial.println("Success !");
-	delay(100);
+	delay(10);
 
-	Serial.println("Config Port 5 to ADC 0-10V");
 	Basic_Config_Port(5, ADCtype1);
-	Serial.println("Success !");
-	delay(100);
+	delay(10);
 
-	Serial.println("Config Port 6 to ADC 0-10V");
 	Basic_Config_Port(6, ADCtype1);
-	Serial.println("Success !");
-	delay(100);
+	delay(10);
 
-	Serial.println("Config Port 7 to ADC 0-10V");
 	Basic_Config_Port(7, ADCtype1);
-	Serial.println("Success !");
-	delay(100);
+	delay(10);
 
-	Serial.println("Config Port 8 to ADC 0-10V");
 	Basic_Config_Port(8, ADCtype1);
-	Serial.println("Success !");
-	delay(100);
+	delay(10);
 
-	Serial.println("Config Port 9 to ADC 0-10V");
 	Basic_Config_Port(9, ADCtype1);
-	Serial.println("Success !");
-	delay(100);
+	delay(10);
 
-	Serial.println("Config Port 10 to ADC 0-10V");
 	Basic_Config_Port(10, ADCtype1);
-	Serial.println("Success !");
-	delay(100);
+	delay(10);
 
-	Serial.println("Config Port 11 to ADC 0-10V");
 	Basic_Config_Port(11, ADCtype1);
-	Serial.println("Success !");
-	delay(100);
+	delay(10);
 	
-	Serial.println("Config Port 12 to ADC 0-10V");
 	Basic_Config_Port(12, ADCtype1);
-	Serial.println("Success !");
-	delay(100);
+	delay(10);
 	
-	Serial.println("Config Port 13 to ADC 0-10V");
 	Basic_Config_Port(13, ADCtype1);
-	Serial.println("Success !");
-	delay(100);
+	delay(10);
 	
-	Serial.println("Config Port 14 to ADC 0-10V");
 	Basic_Config_Port(14, ADCtype1);
-	Serial.println("Success !");
-	delay(100);
+	delay(10);
 	
-	Serial.println("Config Port 15 to ADC 0-10V");
 	Basic_Config_Port(15, ADCtype1);
-	Serial.println("Success !");
-	delay(100);
+	delay(10);
 	
-	Serial.println("Config Port 16 to ADC 0-10V");
 	Basic_Config_Port(16, ADCtype1);
-	Serial.println("Success !");
-	delay(100);
+	delay(10);
 	
-	Serial.println("Config Port 17 to ADC 0-10V");
 	Basic_Config_Port(17, ADCtype1);
-	Serial.println("Success !");
-	delay(100);
+	delay(10);
 	
-	Serial.println("Default Config Success !");
-	Serial.println();
+	Basic_Config_Port(18, ADCtype1);
+	delay(10);
+	
+	Basic_Config_Port(19, ADCtype1);
+	delay(10);
 }
 
 void MAX11301::Advance_Config_Port(uint8_t Port, byte Mode, bool AVR_INV, byte RANGE, byte SAMPLES, byte ASSOCIATED)

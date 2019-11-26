@@ -2,6 +2,7 @@
 #ifndef MAX11301_h
 #define MAX11301_h
 
+#include "TonyS_X1.h"
 #include "Arduino.h"
 #include <Wire.h>
 
@@ -212,6 +213,7 @@ class MAX11301
 {
 public:
 	MAX11301();
+	void Command_Config();
 	void Config_deviceControl();
 	void Advance_Config_Port(uint8_t Port, byte Mode, bool AVR_INV, byte RANGE, byte SAMPLES, byte ASSOCIATED);
 	void Basic_Config_Port(uint8_t Port, uint16_t Basic_Con);
