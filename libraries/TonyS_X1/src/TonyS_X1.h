@@ -22,6 +22,8 @@ public:
 	void analogWrite(uint8_t pin, uint16_t Output); // Output 0-10V
 	void onPower(); // On power on board
 	void offPower(); // Off power on board
+	void onMAX11301(); // On MAX11301's power
+	void offMAX11301(); // Off MAX11301's power
 	void checkIC(); // Check working IC on board
 	bool isrtc_rdy();
 	bool ismax_rdy();

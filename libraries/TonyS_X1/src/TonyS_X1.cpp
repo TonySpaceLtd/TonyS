@@ -14,18 +14,18 @@ byte workingDevice = 0x00;
 
 void TonyS_X1::begin() 
 {
-	delay(500);
 	onPower();
-	delay(1000);
+	onMAX11301();
+	delay(100);
 	Wire.begin();
 	checkIC();
 	
 	IO.Real_pinMode(LED_BUILTIN, OUTPUT); // ------- Set to OUTPUT
-	pinMode(IO14, OUTPUT); //----  Set Pin IO14 (Relay 1) to OUTPUT
-	pinMode(IO15, OUTPUT); //----  Set Pin IO15 (Relay 2) to OUTPUT
+	pinMode(IO15, OUTPUT); //----  Set Pin IO14 (Relay 1) to OUTPUT
+	pinMode(IO16, OUTPUT); //----  Set Pin IO15 (Relay 2) to OUTPUT
 	IO.Real_digitalWrite(LED_BUILTIN, LOW);  //---- OFF LED_BUILTIN
-	digitalWrite(IO14, LOW); //---- Write LOW to pin IO14 (Relay 1)
-	digitalWrite(IO15, LOW); //---- Write LOW to pin IO15 (Relay 2)
+	digitalWrite(IO15, LOW); //---- Write LOW to pin IO14 (Relay 1)
+	digitalWrite(IO16, LOW); //---- Write LOW to pin IO15 (Relay 2)
 	
 	if((workingDevice & 0x01) == 0x01)
 	{
@@ -124,13 +124,25 @@ void TonyS_X1::analogWrite(uint8_t pin, uint16_t Output)
 void TonyS_X1::onPower()
 {
 	IO.Real_pinMode(powerPin, OUTPUT); // ------- Set to OUTPUT
-	IO.Real_digitalWrite(powerPin, HIGH);
+	IO.Real_digitalWrite(powerPin, HIGH); //----- HIGH for ON Board's power
 }
 
 void TonyS_X1::offPower()
 {
 	IO.Real_pinMode(powerPin, OUTPUT); // ------- Set to OUTPUT
-	IO.Real_digitalWrite(powerPin, LOW);  //---- HIGH for ON Board's power
+	IO.Real_digitalWrite(powerPin, LOW);  //----- LOW for OFF Board's power
+}
+
+void TonyS_X1::onMAX11301()
+{	
+	IO.Real_pinMode(POWER_MAX11301, OUTPUT); // ------- Set to OUTPUT
+	IO.Real_digitalWrite(POWER_MAX11301, HIGH);  //---- HIGH for ON Board's power
+}
+
+void TonyS_X1::offMAX11301()
+{
+	IO.Real_pinMode(POWER_MAX11301, OUTPUT); // ------- Set to OUTPUT
+	IO.Real_digitalWrite(POWER_MAX11301, LOW);  //----- LOW for OFF Board's power
 }
 
 void TonyS_X1::checkIC()
