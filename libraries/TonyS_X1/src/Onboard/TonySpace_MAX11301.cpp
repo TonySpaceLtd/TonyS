@@ -97,7 +97,7 @@ void MAX11301::Config_deviceControl()
 			Basic_Config_Port_For_DACADC(19, 1024);  // Config Port 19 to DAC with monitoring  (1024 = 2.5V)
 			writeDAC(19, 1024);  // 1024 = 2.5V
 			delay(100);
-			Serial.println("Reset MAX11301");
+			//Serial.println("Reset MAX11301");
 		}
 		delay(10);
 		
