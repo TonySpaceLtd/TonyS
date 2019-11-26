@@ -61,41 +61,40 @@ void MAX11301::Config_deviceControl()
 	Command_Config();
 
 	//------ Adjust DAC Compensate Value -------//
-	Basic_Config_Port_For_DACADC(19, 1024);  // Config Port 0 to DAC with monitoring  (1024 = 2.5V)
-	writeDAC(19, 1024);  // 1024 = 2.5V
-	delay(100);
+	Basic_Config_Port_For_DACADC(19, 409);  // Config Port 0 to DAC with monitoring  (409 = 1.0V)
+	writeDAC(19, 409);  // 409 = 1.0V
 	uint16_t dataADC = 0;
 	for(uint8_t i=0; i<200; i++)
 	{
 		float Voltage = 0;
 		dataADC = readADC(19);  // Read ADC from port 0 (DAC Output)
 		Voltage = float(10.0/4095)*dataADC;
-		if(Voltage < 2.50)
+		if(Voltage < 1.00)
 		{
 			DAC_Compensate++;
 		}
-		else if(Voltage > 2.52)
+		else if(Voltage > 1.02)
 		{
 			DAC_Compensate--;
 		}
-		else if(Voltage > 2.50 && Voltage < 2.52)
+		else if(Voltage > 1.00 && Voltage < 1.02)
 		{
 			Serial.println("Default Config Success !");
 			break;
 		}
 		
-		writeDAC(19, 1024);  // 1024 = 2.5V
+		writeDAC(19, 409);  // 409 = 1.0V
 		
 		if(i%40 == 0)
 		{
-			//DAC_Compensate = 0;
+			DAC_Compensate = 0;
 			Tony.offMAX11301();
 			delay(200);
 			Tony.onMAX11301();
 			delay(200);
 			Command_Config();
-			Basic_Config_Port_For_DACADC(19, 1024);  // Config Port 19 to DAC with monitoring  (1024 = 2.5V)
-			writeDAC(19, 1024);  // 1024 = 2.5V
+			Basic_Config_Port_For_DACADC(19, 409);  // Config Port 19 to DAC with monitoring  (1024 = 2.5V)
+			writeDAC(19, 409);  // 409 = 1.0V
 			delay(100);
 			//Serial.println("Reset MAX11301");
 		}
