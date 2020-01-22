@@ -30,7 +30,7 @@
 #endif
 #include <SPI.h>
 
-#define SPI_DEFAULT_FREQ 27000000 ///< Default SPI data clock frequency
+#define SPI_DEFAULT_FREQ 80000000 ///< Default SPI data clock frequency
 
 /**************************************************************************/
 /*!

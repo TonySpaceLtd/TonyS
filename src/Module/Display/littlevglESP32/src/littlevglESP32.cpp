@@ -1,7 +1,7 @@
 #include "littlevglESP32.h"
 
 Adafruit_ST7789 *mytft;
-
+JOYSTICK joy_lvgl;
 static lv_disp_buf_t disp_buf;
 static lv_color_t buf[LV_HOR_RES_MAX * 10];
 
@@ -13,13 +13,32 @@ Ticker tick; /* timer for interrupt handler */
 void my_disp_flush(lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *color_p);
 static void lv_tick_handler(void);
 bool read_encoder(lv_indev_drv_t * indev, lv_indev_data_t * data);
+bool buttons_read(lv_indev_drv_t * indev, lv_indev_data_t * data);
 
-void lvglInit(Adafruit_ST7789 *display,size_t w,size_t h)
+void lvglInit(Adafruit_ST7789 *display)
+{
+	size_t w,h;
+	mytft = display;
+	if(mytft->_tfttype == TFT_240_240)
+	{
+		w = 240;
+		h = 240;
+	}
+	else
+	{
+		w = 240;
+		h = 320;
+	}
+	lvglInit(w,h);
+	
+}
+
+void lvglInit(size_t w,size_t h)
 {
 	lv_init();
-	mytft = display;
-	mytft->init(w,h);          
-	mytft->setRotation(3);
+	mytft->init(w,h); 
+	if(h == 320)	
+		mytft->setRotation(2);
 	mytft->fillScreen(ST77XX_BLACK);
 	mytft->fillScreen(ST77XX_WHITE);
 	
@@ -38,9 +57,19 @@ void lvglInit(Adafruit_ST7789 *display,size_t w,size_t h)
   
 	lv_indev_drv_t indev_drv;
 	lv_indev_drv_init(&indev_drv);
-	indev_drv.type = LV_INDEV_TYPE_ENCODER;
-	indev_drv.read_cb = read_encoder;
-	lv_indev_drv_register(&indev_drv);
+	//if(joy_lvgl.begin())
+	//{
+		//indev_drv.type = LV_INDEV_TYPE_KEYPAD;
+		//indev_drv.read_cb = buttons_read;
+		//emulated_kp_indev = lv_indev_drv_register(&kp_drv);
+	//}
+	//else	
+	//{
+		indev_drv.type = LV_INDEV_TYPE_ENCODER;
+		indev_drv.read_cb = read_encoder;
+		lv_indev_drv_register(&indev_drv);
+	//}
+	
 	
    /*Initialize the graphics library's tick*/
     tick.attach_ms(LVGL_TICK_PERIOD, lv_tick_handler);
@@ -94,4 +123,61 @@ bool read_encoder(lv_indev_drv_t * indev, lv_indev_data_t * data)
   last_diff = diff;
 
   return false;
+}
+bool buttons_read(lv_indev_drv_t * indev, lv_indev_data_t * data)
+{
+	uint8_t pressKey = joy_lvgl.getCursor();
+	if(pressKey == PRESS_UP)
+	{
+		data->key = 2;
+		data->state = LV_INDEV_STATE_PR;
+	}
+	else
+	{
+		data->key = 2;
+		data->state = LV_INDEV_STATE_REL;
+	}
+	if(pressKey == PRESS_DOWN)
+	{
+		data->key = 1;
+		data->state = LV_INDEV_STATE_PR;
+	}
+	else
+	{
+		data->key = 1;
+		data->state = LV_INDEV_STATE_REL;
+	}
+	if(pressKey == PRESS_LEFT)
+	{
+		data->key = 3;
+		data->state = LV_INDEV_STATE_PR;
+	}
+	else
+	{
+		data->key = 3;
+		data->state = LV_INDEV_STATE_REL;
+	}
+	if(pressKey == PRESS_RIGHT)
+	{
+		data->key = 4;
+		data->state = LV_INDEV_STATE_PR;
+	}
+	else
+	{
+		data->key = 4;
+		data->state = LV_INDEV_STATE_REL;
+	}
+	if(pressKey == PRESS_ENTER)
+	{
+		data->key = 5;
+		data->state = LV_INDEV_STATE_PR;
+	}
+	else
+	{
+		data->key = 5;
+		data->state = LV_INDEV_STATE_REL;
+	}
+	
+  return false;
+	
 }

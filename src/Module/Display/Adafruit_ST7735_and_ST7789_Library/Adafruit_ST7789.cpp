@@ -50,22 +50,43 @@ uint8_t find_dc(uint8_t slot)
 	return -1;
 	
 }
-uint8_t find_rst(uint8_t slot)
+uint8_t find_rst(uint8_t slot,uint8_t type)
 {
-	switch(slot)
+	if(type == TFT_240_240)
 	{
-		case  SLOT1 :
-			return IO1;
-		case  SLOT2 :
-			return IO3;
-		case  SLOT3 :
-			return IO5;
-		case  SLOT4 :
-			return IO7;
-		case  SLOT5 :
-			return IO9;
-		case  SLOT6 :
-			return IO11;
+		switch(slot)
+		{
+			case  SLOT1 :
+				return IO1;
+			case  SLOT2 :
+				return IO3;
+			case  SLOT3 :
+				return IO5;
+			case  SLOT4 :
+				return IO7;
+			case  SLOT5 :
+				return IO9;
+			case  SLOT6 :
+				return IO11;
+		}
+	}
+	if(type == TFT_240_320)
+	{
+		switch(slot)
+		{
+			case  SLOT1 :
+				return IO11;
+			case  SLOT2 :
+				return IO9;
+			case  SLOT3 :
+				return IO7;
+			case  SLOT4 :
+				return IO3;
+			case  SLOT5 :
+				return IO9;
+			case  SLOT6 :
+				return IO1;
+		}
 	}
 	
 	return -1;
@@ -73,10 +94,17 @@ uint8_t find_rst(uint8_t slot)
 
 
 Adafruit_ST7789::Adafruit_ST7789(int8_t slot) :
-Adafruit_ST77xx(320, 240,find_cs(slot),find_dc(slot),find_rst(slot)) 
+Adafruit_ST77xx(320, 240,find_cs(slot),find_dc(slot),find_rst(slot,0)) 
 {
 	
 }
+
+Adafruit_ST7789::Adafruit_ST7789(int8_t slot,uint8_t tfttype = TFT_240_240) :
+Adafruit_ST77xx(320, 240,find_cs(slot),find_dc(slot),find_rst(slot,tfttype)) 
+{
+	_tfttype = tfttype;
+}
+
 
 
 
@@ -168,8 +196,13 @@ void Adafruit_ST7789::init(uint16_t width, uint16_t height, uint8_t mode) {
   _height   = height;
 
   displayInit(generic_st7789);
-
-  setRotation(0);
+  if(_tfttype == TFT_240_320)
+  {
+	invertDisplay(false);
+	setRotation(0);
+  }
+  else
+	setRotation(3);
 }
 
 /**************************************************************************/
@@ -190,6 +223,7 @@ void Adafruit_ST7789::setRotation(uint8_t m) {
      _ystart = _rowstart;
      _width = WIDTH;
      _height = HEIGHT;
+	 
      break;
    case 1:
      madctl  = ST77XX_MADCTL_MY | ST77XX_MADCTL_MV | ST77XX_MADCTL_RGB;

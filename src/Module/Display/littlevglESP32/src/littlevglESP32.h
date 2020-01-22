@@ -6,8 +6,8 @@
 #include <SPI.h>
 
 #include "lvgl/lvgl.h"
-
-void lvglInit(Adafruit_ST7789 *display,size_t w=240,size_t h=240);
+void lvglInit(Adafruit_ST7789 *display);
+void lvglInit(size_t w,size_t h);
 void startLvglHandle();
 
 #endif
