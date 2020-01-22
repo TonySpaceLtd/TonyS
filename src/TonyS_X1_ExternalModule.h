@@ -19,6 +19,19 @@
 #include "Module/NBIoT/TonySpace_NBIoT_MQTT.h"
 #include "Module/NBIoT/Magellan.h"
 
+#include "Module/3G/UC20_lib.h"
+#include "Module/3G/UC20_TCP.h"
+#include "Module/3G/UC20_call.h"
+#include "Module/3G/UC20_Firebase.h"
+#include "Module/3G/UC20_FTP.h"
+#include "Module/3G/UC20_file.h"
+#include "Module/3G/UC20_GNSS.h"
+#include "Module/3G/UC20_HTTP.h"
+#include "Module/3G/UC20_LineNotify.h"
+#include "Module/3G/UC20_SMS.h"
+#include "Module/3G/UC_MQTT.h"
+
+
 #include "Module/Maxsonar/TonySpace_Maxsonar.h"
 
 
