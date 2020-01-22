@@ -10,7 +10,6 @@ void setup() {
   gsm.initial(SLOT2);
  
 }
-
 void loop() {
   if(gsm.available() > 0) {
     Serial.write(gsm.read());
