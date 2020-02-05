@@ -88,6 +88,10 @@ void Tony_RS485::begin(unsigned long baud)
 	bool invert = false;
 	unsigned long timeout_ms = 20000UL;
 	
+	_baud = baud;
+	//calculate the time perdiod for 3 characters for the given bps in ms.
+	_frameDelay = 24000/_baud;
+	
     if(0 > _uart_nr || _uart_nr > 2) {
         log_e("Serial number is invalid, please use 0, 1 or 2");
         return;
@@ -184,6 +188,7 @@ int Tony_RS485::read(void)
     if(available()) {
         return uartRead(_uart);
     }
+	delayMicroseconds(1);
     return -1;
 }
 
@@ -194,15 +199,35 @@ void Tony_RS485::flush()
 
 size_t Tony_RS485::write(uint8_t c)
 {
-	Tony.digitalWrite(select_mode, 1);
-    uartWrite(_uart, c);
+	if (modeRTU == 0) 
+	{
+		Tony.digitalWrite(select_mode, 1);
+		uartWrite(_uart, c);
+		delayMicroseconds(2000);
+		Tony.digitalWrite(select_mode, 0);
+	}
+	else
+	{
+		uartWrite(_uart, c);
+		delayMicroseconds(2000);
+	}
     return 1;
 }
 
 size_t Tony_RS485::write(const uint8_t *buffer, size_t size)
 {
-	Tony.digitalWrite(select_mode, 1);
-    uartWriteBuf(_uart, buffer, size);
+	if (modeRTU == 0) 
+	{
+		Tony.digitalWrite(select_mode, 1);
+		uartWriteBuf(_uart, buffer, size);
+		delayMicroseconds(2000);
+		Tony.digitalWrite(select_mode, 0);
+	}
+	else
+	{
+		uartWriteBuf(_uart, buffer, size);
+		delayMicroseconds(2000);
+	}
     return size;
 }
 uint32_t  Tony_RS485::baudRate()
@@ -213,4 +238,102 @@ uint32_t  Tony_RS485::baudRate()
 Tony_RS485::operator bool() const
 {
     return true;
+}
+
+void Tony_RS485::checkSerial(void)
+{
+	//while there is more data in the UART than when last checked
+	while(RS485.available()> _len)
+	{
+		_len = RS485.available();
+		//Wait for 3 bytewidths of data (SOM/EOM)
+		delay(_frameDelay);
+		//Check the UART again
+	}
+}
+
+/*
+Copies the contents of the UART to a buffer
+*/
+void Tony_RS485::serialRx(void)
+{
+	byte i;
+	
+	for (i=0 ; i < _len ; i++)
+	{
+	   _data[i] = RS485.read();
+	}
+}
+
+byte Tony_RS485::readByte(uint8_t byteNumber)
+{
+	if(byteNumber <= _len)
+	{
+		return (_data[byteNumber]);
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+uint16_t Tony_RS485::get_byteNumber(void)
+{
+	return _len;
+}
+
+bool Tony_RS485::requestData(uint8_t slave_ID, uint8_t function, uint16_t startAddress, uint16_t numberData)
+{
+	uint16_t crc = 0xFFFF;
+	byte sendByte[8];
+	slaveID = slave_ID;
+	modeRTU = 1;
+	
+	sendByte[0] = slaveID;
+	sendByte[1] = function;
+	sendByte[2] = startAddress>>8;
+	sendByte[3] = startAddress;
+	sendByte[4] = numberData>>8;
+	sendByte[5] = numberData;
+	
+	for (int position = 0; position < 6; position++) {
+    crc ^= (uint16_t)sendByte[position];          // XOR byte into least sig. byte of crc
+  
+		for (int i = 8; i != 0; i--) {    // Loop over each bit
+		if ((crc & 0x0001) != 0) {      // If the LSB is set
+			crc >>= 1;                    // Shift right and XOR 0xA001
+			crc ^= 0xA001;
+		}
+		else                            // Else LSB is not set
+        crc >>= 1;                    // Just shift right
+		}
+	}	
+	sendByte[6] = crc;
+	sendByte[7] = crc>>8;
+	
+	Tony.digitalWrite(select_mode, 1);
+	for(uint8_t i = 0 ; i < 8 ; i++)
+	{
+		RS485.write(sendByte[i]);
+		//delay(2);
+	}
+	delay(16);
+	Tony.digitalWrite(select_mode, 0);
+	modeRTU = 0;
+	
+	//initialize mesasge length
+	_len = 0;
+
+	//check for data in the recieve buffer
+	this->checkSerial();
+    
+	
+	//if there is nothing in the recieve buffer, bail.
+	if(_len == 0)
+	{
+		return 0;
+	}
+	//retrieve the query message from the serial uart
+	this->serialRx();
+	return 1;
 }

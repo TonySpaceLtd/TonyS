@@ -3,14 +3,14 @@
 
 void setup() 
 {
-    Serial.begin(115200);
+    Serial.begin(9600);
     Serial.println("TonyS_X1 Example");
     Tony.begin();  //----  begin Library
     
 //--------- RS485 Module Config ---------//
     RS485.slot(SLOT1);    //  Select slot such as SLOT1, SLOT1_U, SLOT2, SLOT2_U, SLOT3, SLOT3_U ...
                           //  SLOTx_U = Floor 2
-    RS485.begin(115200);  // Select buad rate 
+    RS485.begin(9600);  // Select buad rate 
 //--------------------------------------//
 }
 
