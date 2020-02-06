@@ -209,7 +209,7 @@ size_t Tony_RS485::write(uint8_t c)
 	else
 	{
 		uartWrite(_uart, c);
-		delayMicroseconds(2000);
+		//delayMicroseconds(2000);
 	}
     return 1;
 }
@@ -226,7 +226,7 @@ size_t Tony_RS485::write(const uint8_t *buffer, size_t size)
 	else
 	{
 		uartWriteBuf(_uart, buffer, size);
-		delayMicroseconds(2000);
+		//delayMicroseconds(2000);
 	}
     return size;
 }
