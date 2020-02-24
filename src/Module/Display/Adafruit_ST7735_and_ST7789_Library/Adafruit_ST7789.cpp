@@ -57,17 +57,17 @@ uint8_t find_rst(uint8_t slot,uint8_t type)
 		switch(slot)
 		{
 			case  SLOT1 :
-				return IO1;
+				return AIO0;
 			case  SLOT2 :
-				return IO3;
+				return AIO2;
 			case  SLOT3 :
-				return IO5;
+				return AIO4;
 			case  SLOT4 :
-				return IO7;
+				return AIO6;
 			case  SLOT5 :
-				return IO9;
+				return AIO8;
 			case  SLOT6 :
-				return IO11;
+				return AIO10;
 		}
 	}
 	if(type == TFT_240_320)
@@ -75,17 +75,13 @@ uint8_t find_rst(uint8_t slot,uint8_t type)
 		switch(slot)
 		{
 			case  SLOT1 :
-				return IO11;
+				return IO10;
 			case  SLOT2 :
-				return IO9;
+				return IO8;
 			case  SLOT3 :
-				return IO7;
+				return IO2;
 			case  SLOT4 :
-				return IO3;
-			case  SLOT5 :
-				return IO9;
-			case  SLOT6 :
-				return IO1;
+				return IO0;
 		}
 	}
 	
