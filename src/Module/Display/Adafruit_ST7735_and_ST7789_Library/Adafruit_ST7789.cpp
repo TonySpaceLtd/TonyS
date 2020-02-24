@@ -30,22 +30,39 @@ uint8_t find_cs(uint8_t slot)
 {
 	return IO_CS;
 }
-uint8_t find_dc(uint8_t slot)
+uint8_t find_dc(uint8_t slot,uint8_t type)
 {
-	switch(slot)
+	if(type == TFT_240_240)
 	{
-		case  SLOT1 :
-			return IO0;
-		case  SLOT2 :
-			return IO2;
-		case  SLOT3 :
-			return IO4;
-		case  SLOT4 :
-			return IO6;
-		case  SLOT5 :
-			return IO8;
-		case  SLOT6 :
-			return IO10;
+		switch(slot)
+		{
+			case  SLOT1 :
+				return IO0;
+			case  SLOT2 :
+				return IO2;
+			case  SLOT3 :
+				return IO4;
+			case  SLOT4 :
+				return IO6;
+			case  SLOT5 :
+				return IO8;
+			case  SLOT6 :
+				return IO10;
+		}
+	}
+	if(type == TFT_240_320)
+	{
+		switch(slot)
+		{
+			case  SLOT1 :
+				return IO8;
+			case  SLOT2 :
+				return IO6;
+			case  SLOT4 :
+				return IO2;
+			case  SLOT5 :
+				return IO0;
+		}
 	}
 	return -1;
 	
@@ -75,13 +92,13 @@ uint8_t find_rst(uint8_t slot,uint8_t type)
 		switch(slot)
 		{
 			case  SLOT1 :
-				return IO10;
-			case  SLOT2 :
-				return IO8;
-			case  SLOT3 :
 				return IO2;
+			case  SLOT2 :
+				return IO4;
 			case  SLOT4 :
-				return IO0;
+				return IO8;
+			case  SLOT5 :
+				return IO10;
 		}
 	}
 	
@@ -90,13 +107,13 @@ uint8_t find_rst(uint8_t slot,uint8_t type)
 
 
 Adafruit_ST7789::Adafruit_ST7789(int8_t slot) :
-Adafruit_ST77xx(320, 240,find_cs(slot),find_dc(slot),find_rst(slot,0)) 
+Adafruit_ST77xx(320, 240,find_cs(slot),find_dc(slot,0),find_rst(slot,0)) 
 {
 	
 }
 
 Adafruit_ST7789::Adafruit_ST7789(int8_t slot,uint8_t tfttype = TFT_240_240) :
-Adafruit_ST77xx(320, 240,find_cs(slot),find_dc(slot),find_rst(slot,tfttype)) 
+Adafruit_ST77xx(320, 240,find_cs(slot),find_dc(slot,tfttype),find_rst(slot,tfttype)) 
 {
 	_tfttype = tfttype;
 }
