@@ -21,15 +21,22 @@ void TonyS_X1::begin()
 	checkIC();
 	
 	IO.Real_pinMode(LED_BUILTIN, OUTPUT); // ------- Set to OUTPUT
-	pinMode(IO15, OUTPUT); //----  Set Pin IO14 (Relay 1) to OUTPUT
-	pinMode(IO16, OUTPUT); //----  Set Pin IO15 (Relay 2) to OUTPUT
 	IO.Real_digitalWrite(LED_BUILTIN, LOW);  //---- OFF LED_BUILTIN
-	digitalWrite(IO15, LOW); //---- Write LOW to pin IO14 (Relay 1)
-	digitalWrite(IO16, LOW); //---- Write LOW to pin IO15 (Relay 2)
 	
 	if((workingDevice & 0x01) == 0x01)
 	{
 		MAX11301.Config_deviceControl(); 
+		
+		// Set MAX11301 to default pin mode 
+		for(uint8_t i=0; i<20; i++)
+		{
+			pinStatus[i] = modeGPI;
+		}
+		
+		pinMode(IO15, OUTPUT); //----  Set Pin IO14 (Relay 1) to OUTPUT
+		pinMode(IO16, OUTPUT); //----  Set Pin IO15 (Relay 2) to OUTPUT
+		digitalWrite(IO15, LOW); //---- Write LOW to pin IO14 (Relay 1)
+		digitalWrite(IO16, LOW); //---- Write LOW to pin IO15 (Relay 2)
 	}
 }
 
@@ -41,11 +48,13 @@ void TonyS_X1::pinMode(uint8_t pin, uint8_t type)
 		{
 			if(type == INPUT)
 			{
-				MAX11301.Basic_Config_Port_For_GPI(pin, 3276); //Threshold ‭‭3276‬ ‬= 2.0V  , 0xFFF = 2.5V(MAX)
+				MAX11301.Basic_Config_Port_For_GPI(pin, 0xfff); //Threshold ‭‭4095 ‬= 2.5V  , 0xfff = 2.5V(MAX)
+				pinStatus[pin] = modeGPI;
 			}
 			else if(type == OUTPUT)
 			{
 				MAX11301.Basic_Config_Port_For_GPO(pin, 1352); //Logic's ouput 1352 = 3.3V  
+				pinStatus[pin] = modeGPO;
 			}
 			else if(type == INPUT_PULLUP)
 			{
@@ -77,7 +86,7 @@ void TonyS_X1::digitalWrite(uint8_t pin, bool value)
 		}
 		else if(value == 1)
 		{
-			MAX11301.writeGPO(pin, 1352); //Logic's ouput 1352 = 3.3V  
+			MAX11301.writeGPO(pin, 1); //Logic's ouput 1 = HIGH 
 		}
 	}
 	else
@@ -105,8 +114,16 @@ uint16_t TonyS_X1::analogRead(uint8_t pin)
 	uint16_t dataADC = 0;
 	if(pin <= 19)
 	{
-		MAX11301.Basic_Config_Port(pin, ADCtype1);  // Config Port (pin) to ADC 0-10V
-		dataADC = MAX11301.readADC(pin);  // Read ADC from port (pin) 
+		if(pinStatus[pin] == modeADC)
+		{
+			dataADC = MAX11301.readADC(pin);  // Read ADC from port (pin) 
+		}
+		else
+		{
+			MAX11301.Basic_Config_Port(pin, ADCtype1);  // Config Port (pin) to ADC 0-10V
+			dataADC = MAX11301.readADC(pin);  // Read ADC from port (pin) 
+			pinStatus[pin] = modeADC;
+		}
 	}
 	else
 	{
@@ -117,8 +134,16 @@ uint16_t TonyS_X1::analogRead(uint8_t pin)
 
 void TonyS_X1::analogWrite(uint8_t pin, uint16_t Output)
 {
-	MAX11301.Basic_Config_Port(pin, DACtype); 
-	MAX11301.writeDAC(pin, Output);  //Output 0-10V
+	if(pinStatus[pin] == modeDAC)
+	{
+		MAX11301.writeDAC(pin, Output);  //Output 0-4095
+	}
+	else
+	{
+		MAX11301.Basic_Config_Port(pin, DACtype); 
+		MAX11301.writeDAC(pin, Output);  //Output 0-4095
+		pinStatus[pin] = modeDAC;
+	}
 }
 
 void TonyS_X1::onPower()

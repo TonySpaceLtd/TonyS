@@ -10,6 +10,12 @@
 #include "Onboard/TonySpace_IO.h"
 #include "Onboard/RTClib/RTClib.h"
 
+#define modeGPI 	0x00
+#define modeGPO 	0x01
+#define modeADC 	0x02
+#define modeDAC 	0x03
+#define modeDACADC  0x04
+
 class TonyS_X1
 {
 public:
@@ -27,6 +33,7 @@ public:
 	void checkIC(); // Check working IC on board
 	bool isrtc_rdy();
 	bool ismax_rdy();
+	byte pinStatus[19];
 	 
 	HardwareSerial SerialBegin(uint8_t slot,unsigned long baud,uint32_t config=SERIAL_8N1, int8_t rxPin=-1, int8_t txPin=-1, bool invert=false, unsigned long timeout_ms = 20000UL); //Serial
 	

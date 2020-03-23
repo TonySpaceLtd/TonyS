@@ -18,14 +18,14 @@ void MAX11301::Command_Config()
     Wire.write(0x00);
     Wire.write(0x00);
     Wire.endTransmission();
-	delay(40);
+	delay(1);
 
 	Wire.beginTransmission(ADDRMAX11301);
     Wire.write(GPO_port_16_to_19);
     Wire.write(0x00);
     Wire.write(0x00);
     Wire.endTransmission();
-	delay(40);
+	delay(1);
 	//------------------------------//
 
 	uint16_t regData = 0;
@@ -49,41 +49,255 @@ void MAX11301::Command_Config()
     Wire.write(Data_1);
     Wire.write(Data_2);
     Wire.endTransmission();
-	delay(40);
+	delay(1);
+	
+	Wire.beginTransmission(ADDRMAX11301);  //Interrupt mask register
+    Wire.write(0x11);
+    Wire.write(0x7f);
+    Wire.write(0xc0);
+    Wire.endTransmission();
+	delay(1);
+	
+	Wire.beginTransmission(ADDRMAX11301);  //GPI port 0 to 7 mode register
+    Wire.write(0x12);
+    Wire.write(0x00);
+    Wire.write(0x00);
+    Wire.endTransmission();
+	delay(1);
+	
+	Wire.beginTransmission(ADDRMAX11301);  //GPI port 8 to 15 mode register
+    Wire.write(0x13);
+    Wire.write(0x00);
+    Wire.write(0x00);
+    Wire.endTransmission();
+	delay(1);
+	
+	Wire.beginTransmission(ADDRMAX11301);  //GPI port 16 to 19 mode register
+    Wire.write(0x14);
+    Wire.write(0x00);
+    Wire.write(0x00);
+    Wire.endTransmission();
+	delay(1);
+	
+	Wire.beginTransmission(ADDRMAX11301);  //DAC preset data #1
+    Wire.write(0x16);
+    Wire.write(0x00);
+    Wire.write(0x00);
+    Wire.endTransmission();
+	delay(1);
+	
+	Wire.beginTransmission(ADDRMAX11301);  //DAC preset data #2
+    Wire.write(0x17);
+    Wire.write(0x00);
+    Wire.write(0x00);
+    Wire.endTransmission();
+	delay(1);
+	
+	Wire.beginTransmission(ADDRMAX11301);  //Temperature monitor configuration
+    Wire.write(0x18);
+    Wire.write(0x00);
+    Wire.write(0x00);
+    Wire.endTransmission();
+	delay(1);
+	
+	Wire.beginTransmission(ADDRMAX11301);  //Internal temperature monitor high threshold
+    Wire.write(0x19);
+    Wire.write(0x07);
+    Wire.write(0xff);
+    Wire.endTransmission();
+	delay(1);
+	
+	Wire.beginTransmission(ADDRMAX11301);  //Internal temperature monitor low threshold
+    Wire.write(0x1a);
+    Wire.write(0x08);
+    Wire.write(0x00);
+    Wire.endTransmission();
+	delay(1);
+	
+	Wire.beginTransmission(ADDRMAX11301);  //1st external temperature monitor high threshold
+    Wire.write(0x1b);
+    Wire.write(0x07);
+    Wire.write(0xff);
+    Wire.endTransmission();
+	delay(1);
+	
+	Wire.beginTransmission(ADDRMAX11301);  //1st external temperature monitor low threshold
+    Wire.write(0x1c);
+    Wire.write(0x08);
+    Wire.write(0x00);
+    Wire.endTransmission();
+	delay(1);
+	
+	Wire.beginTransmission(ADDRMAX11301);  //2nd external temperature monitor high threshold
+    Wire.write(0x1d);
+    Wire.write(0x07);
+    Wire.write(0xff);
+    Wire.endTransmission();
+	delay(1);
+	
+	Wire.beginTransmission(ADDRMAX11301);  //2nd external temperature monitor low threshold
+    Wire.write(0x1e);
+    Wire.write(0x08);
+    Wire.write(0x00);
+    Wire.endTransmission();
+	delay(1);
 	
 	defaultConfig();
-	delay(100);
+	delay(10);
+}
+
+void MAX11301::defaultConfig()
+{
+	// Config Port
+	Basic_Config_Port(0, GPItype);
+	delay(1);
+
+	Basic_Config_Port(1, GPItype);
+	delay(1);
+
+	Basic_Config_Port(2, GPItype);
+	delay(1);
+
+	Basic_Config_Port(3, GPItype);
+	delay(1);
+
+	Basic_Config_Port(4, GPItype);
+	delay(1);
+
+	Basic_Config_Port(5, GPItype);
+	delay(1);
+
+	Basic_Config_Port(6, GPItype);
+	delay(1);
+
+	Basic_Config_Port(7, GPItype);
+	delay(1);
+
+	Basic_Config_Port(8, GPItype);
+	delay(1);
+
+	Basic_Config_Port(9, GPItype);
+	delay(1);
+
+	Basic_Config_Port(10, GPItype);
+	delay(1);
+
+	Basic_Config_Port(11, GPItype);
+	delay(1);
+	
+	Basic_Config_Port(12, GPItype);
+	delay(1);
+	
+	Basic_Config_Port(13, GPItype);
+	delay(1);
+	
+	Basic_Config_Port(14, GPItype);
+	delay(1);
+	
+	Basic_Config_Port(15, GPItype);
+	delay(1);
+	
+	Basic_Config_Port(16, GPItype);
+	delay(1);
+	
+	Basic_Config_Port(17, GPItype);
+	delay(1);
+	
+	Basic_Config_Port(18, DACADC);
+	delay(1);
+
+	Basic_Config_Port(19, GPItype);
+	delay(1);
+	
+	
+	// DAC data register
+	writeDAC(0, 4095);
+	delay(1);
+	
+	writeDAC(1, 4095);
+	delay(1);
+	
+	writeDAC(2, 4095);
+	delay(1);
+	
+	writeDAC(3, 4095);
+	delay(1);
+	
+	writeDAC(4, 4095);
+	delay(1);
+	
+	writeDAC(5, 4095);
+	delay(1);
+	
+	writeDAC(6, 4095);
+	delay(1);
+	
+	writeDAC(7, 4095);
+	delay(1);
+	
+	writeDAC(8, 4095);
+	delay(1);
+	
+	writeDAC(9, 4095);
+	delay(1);
+	
+	writeDAC(10, 4095);
+	delay(1);
+	
+	writeDAC(11, 4095);
+	delay(1);
+	
+	writeDAC(12, 4095);
+	delay(1);
+	
+	writeDAC(13, 4095);
+	delay(1);
+	
+	writeDAC(14, 4095);
+	delay(1);
+	
+	writeDAC(15, 4095);
+	delay(1);
+	
+	writeDAC(16, 4095);
+	delay(1);
+	
+	writeDAC(17, 4095);
+	delay(1);
+	
+	writeDAC(18, 184);
+	delay(1);
+	
+	writeDAC(19, 4095);
+	delay(1);
 }
 
 void MAX11301::Config_deviceControl()
 {
-	delay(200);
+	delay(1);
 	Command_Config();
 
 	//------ Adjust DAC Compensate Value -------//
-	Basic_Config_Port_For_DACADC(19, 409);  // Config Port 0 to DAC with monitoring  (409 = 1.0V)
-	writeDAC(19, 409);  // 409 = 1.0V
 	uint16_t dataADC = 0;
 	for(uint8_t i=0; i<200; i++)
 	{
 		float Voltage = 0;
-		dataADC = readADC(19);  // Read ADC from port 0 (DAC Output)
+		dataADC = readADC(18);  // Read ADC from port 18 (DAC Output)
 		Voltage = float(10.0/4095)*dataADC;
-		if(Voltage < 1.00)
+		if(Voltage < 0.449)
 		{
 			DAC_Compensate++;
 		}
-		else if(Voltage > 1.02)
+		else if(Voltage > 0.46)
 		{
 			DAC_Compensate--;
 		}
-		else if(Voltage > 1.00 && Voltage < 1.02)
+		else if(Voltage > 0.449 && Voltage <= 0.46)
 		{
 			Serial.println("Default Config Success !");
 			break;
 		}
-		
-		writeDAC(19, 409);  // 409 = 1.0V
+		writeDAC(18, 184);  // 184 = 0.449V
 		
 		if(i%40 == 0)
 		{
@@ -93,8 +307,8 @@ void MAX11301::Config_deviceControl()
 			Tony.onMAX11301();
 			delay(200);
 			Command_Config();
-			Basic_Config_Port_For_DACADC(19, 409);  // Config Port 19 to DAC with monitoring  (1024 = 2.5V)
-			writeDAC(19, 409);  // 409 = 1.0V
+			Basic_Config_Port_For_DACADC(18, 184);  // Config Port 18 to DAC with monitoring  (184 = 0.449V)
+			writeDAC(18, 184);  // 184 = 0.449V
 			delay(100);
 			//Serial.println("Reset MAX11301");
 		}
@@ -105,73 +319,12 @@ void MAX11301::Config_deviceControl()
 			DAC_Compensate = 0;
 			Serial.println("Can't calibrate compensate value !");
 		}
-	}
+	}  
 	
 	//------ End Adjust Compensate Value -----//
-	Basic_Config_Port_For_GPI(0, 3276);
-}
-
-void MAX11301::defaultConfig()
-{
-	Basic_Config_Port(0, ADCtype1);
-	delay(10);
-
-	Basic_Config_Port(1, ADCtype1);
-	delay(10);
-
-	Basic_Config_Port(2, ADCtype1);
-	delay(10);
-
-	Basic_Config_Port(3, ADCtype1);
-	delay(10);
-
-	Basic_Config_Port(4, ADCtype1);
-	delay(10);
-
-	Basic_Config_Port(5, ADCtype1);
-	delay(10);
-
-	Basic_Config_Port(6, ADCtype1);
-	delay(10);
-
-	Basic_Config_Port(7, ADCtype1);
-	delay(10);
-
-	Basic_Config_Port(8, ADCtype1);
-	delay(10);
-
-	Basic_Config_Port(9, ADCtype1);
-	delay(10);
-
-	Basic_Config_Port(10, ADCtype1);
-	delay(10);
-
-	Basic_Config_Port(11, ADCtype1);
-	delay(10);
-	
-	Basic_Config_Port(12, ADCtype1);
-	delay(10);
-	
-	Basic_Config_Port(13, ADCtype1);
-	delay(10);
-	
-	Basic_Config_Port(14, ADCtype1);
-	delay(10);
-	
-	Basic_Config_Port(15, ADCtype1);
-	delay(10);
-	
-	Basic_Config_Port(16, ADCtype1);
-	delay(10);
-	
-	Basic_Config_Port(17, ADCtype1);
-	delay(10);
-	
-	Basic_Config_Port(18, ADCtype1);
-	delay(10);
-	
-	Basic_Config_Port(19, ADCtype1);
-	delay(10);
+	Basic_Config_Port_For_GPI(18, 819);
+	Basic_Config_Port_For_GPI(19, 819);
+	delay(1);
 }
 
 void MAX11301::Advance_Config_Port(uint8_t Port, byte Mode, bool AVR_INV, byte RANGE, byte SAMPLES, byte ASSOCIATED)
@@ -199,7 +352,7 @@ void MAX11301::Advance_Config_Port(uint8_t Port, byte Mode, bool AVR_INV, byte R
     // Serial.print(Data_1 ,HEX);
     // Serial.print(Data_2 ,HEX);
     // Serial.println();
-	delay(40);
+	delay(1);
 }
 
 void MAX11301::Basic_Config_Port(uint8_t Port, uint16_t Basic_Con)
@@ -222,7 +375,7 @@ void MAX11301::Basic_Config_Port(uint8_t Port, uint16_t Basic_Con)
 	// Serial.print("	");
     // Serial.print(Data_2 ,HEX);
     // Serial.println();
-	delay(40);
+	delay(1);
 }
 
 void MAX11301::Basic_Config_Port_For_DACADC(uint8_t Port, int16_t Output)
@@ -249,7 +402,7 @@ void MAX11301::Basic_Config_Port_For_DACADC(uint8_t Port, int16_t Output)
 	// Serial.print("	");
     // Serial.print(Data_2 ,HEX);
     // Serial.println();
-	delay(40);
+	delay(1);
 
 	Wire.beginTransmission(ADDRMAX11301);
     Wire.write(Config_Port_00+Port+64);
@@ -263,13 +416,13 @@ void MAX11301::Basic_Config_Port_For_DACADC(uint8_t Port, int16_t Output)
 	// Serial.print("	");
     // Serial.print(Data_4 ,HEX);
     // Serial.println();
-	delay(40);
+	delay(1);
 }
 
 void MAX11301::Basic_Config_Port_For_GPI(uint8_t Port, uint16_t Threshold)
 {
 	Port = constrain(Port, 0, 19);
-	Threshold = constrain(Threshold, 0, 0x0fff);
+	Threshold = constrain(Threshold, 0, 4095);
 
 	uint16_t regData1 = GPItype;
 	uint16_t regData2 = Threshold;
@@ -289,7 +442,7 @@ void MAX11301::Basic_Config_Port_For_GPI(uint8_t Port, uint16_t Threshold)
 	// Serial.print("	");
     // Serial.print(Data_2 ,HEX);
     // Serial.println();
-	delay(40);
+	delay(1);
 
 	Wire.beginTransmission(ADDRMAX11301);
     Wire.write(Config_Port_00+Port+64);
@@ -303,7 +456,7 @@ void MAX11301::Basic_Config_Port_For_GPI(uint8_t Port, uint16_t Threshold)
 	// Serial.print("	");
     // Serial.print(Data_4 ,HEX);
     // Serial.println();
-	delay(40);
+	delay(1);
 }
 
 void MAX11301::Basic_Config_Port_For_GPO(uint8_t Port, int16_t Output)
@@ -331,7 +484,7 @@ void MAX11301::Basic_Config_Port_For_GPO(uint8_t Port, int16_t Output)
 	// Serial.print("	");
     // Serial.print(Data_2 ,HEX);
     // Serial.println();
-	delay(40);
+	delay(1);
 
 	Wire.beginTransmission(ADDRMAX11301);
     Wire.write(Config_Port_00+Port+64);
@@ -345,7 +498,7 @@ void MAX11301::Basic_Config_Port_For_GPO(uint8_t Port, int16_t Output)
 	// Serial.print("	");
     // Serial.print(Data_4 ,HEX);
     // Serial.println();
-	delay(40);
+	delay(1);
 }
 
 uint16_t MAX11301::readADC(uint8_t Port)
