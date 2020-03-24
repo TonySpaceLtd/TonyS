@@ -22,7 +22,7 @@ void loop()
   Serial.println(value); 
 
   //----- Convert value to mA ------//
-  milliamp = value/62.80;  //  1mA = 62.80   Calculate analog to voltage 
+  milliamp = value/62.30;  //  1mA = 62.30   Calculate analog to voltage 
   Serial.print("Current = ");
   Serial.print(milliamp, 3);  
   Serial.println(" mA");  
