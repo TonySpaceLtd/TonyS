@@ -3,7 +3,7 @@
 Adafruit_ST7789 *mytft;
 JOYSTICK joy_lvgl;
 static lv_disp_buf_t disp_buf;
-static lv_color_t buf[LV_HOR_RES_MAX * 10];
+static lv_color_t *lvglbuf;
 
 #include <Ticker.h>
 #define LVGL_TICK_PERIOD 20
@@ -19,7 +19,7 @@ void lvglInit(Adafruit_ST7789 *display)
 {
 	size_t w,h;
 	mytft = display;
-	if(mytft->_tfttype == TFT_240_240)
+	if((mytft->_tfttype == TFT_240_240)||(mytft->_tfttype == TFT_240_240_OLD))
 	{
 		w = 240;
 		h = 240;
@@ -35,6 +35,7 @@ void lvglInit(Adafruit_ST7789 *display)
 
 void lvglInit(size_t w,size_t h)
 {
+	lvglbuf = (lv_color_t*)ps_calloc(w * 10, sizeof(lv_color_t));
 	lv_init();
 	mytft->init(w,h); 
 	if(h == 320)	
@@ -44,7 +45,7 @@ void lvglInit(size_t w,size_t h)
 	
 	
 	
-	lv_disp_buf_init(&disp_buf, buf, NULL, LV_HOR_RES_MAX * 10);
+	lv_disp_buf_init(&disp_buf, lvglbuf, NULL, w * 10);
 	
 	
 	lv_disp_drv_t disp_drv;

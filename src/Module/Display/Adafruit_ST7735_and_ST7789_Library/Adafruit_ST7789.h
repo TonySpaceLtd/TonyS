@@ -3,8 +3,9 @@
 
 #include "Adafruit_ST77xx.h"
 
-#define TFT_240_240		0 
-#define TFT_240_320		1
+#define TFT_240_240			0 
+#define TFT_240_320			1
+#define TFT_240_240_OLD 	2
  
 
 

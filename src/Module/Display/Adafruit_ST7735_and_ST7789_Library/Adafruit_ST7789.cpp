@@ -32,7 +32,7 @@ uint8_t find_cs(uint8_t slot)
 }
 uint8_t find_dc(uint8_t slot,uint8_t type)
 {
-	if(type == TFT_240_240)
+	if((type == TFT_240_240)||(type == TFT_240_240_OLD))
 	{
 		switch(slot)
 		{
@@ -64,6 +64,7 @@ uint8_t find_dc(uint8_t slot,uint8_t type)
 				return IO0;
 		}
 	}
+	
 	return -1;
 	
 }
@@ -99,6 +100,24 @@ uint8_t find_rst(uint8_t slot,uint8_t type)
 				return IO8;
 			case  SLOT5 :
 				return IO10;
+		}
+	}
+	if(type == TFT_240_240_OLD)
+	{
+		switch(slot)
+		{
+			case  SLOT1 :
+				return IO1;
+			case  SLOT2 :
+				return IO3;
+			case  SLOT3 :
+				return IO5;
+			case  SLOT4 :
+				return IO7;
+			case  SLOT5 :
+				return IO9;
+			case  SLOT6 :
+				return IO11;
 		}
 	}
 	

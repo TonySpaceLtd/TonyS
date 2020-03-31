@@ -10,7 +10,20 @@ void lvglInit(Adafruit_ST7789 *display);
 void lvglInit(size_t w,size_t h);
 void startLvglHandle();
 
+
+
+
+
+
+
+
+
+
 #endif
+
+
+
+
 
 
 

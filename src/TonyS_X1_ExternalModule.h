@@ -6,11 +6,12 @@
 #include "Module/4_20mA/TonySpace_4_20mA.h"
 #include "Module/RS485/TonySpace_RS485.h"
 #include "Module/Adafruit_SHT31_Library/Adafruit_SHT31.h";
-#include "Module/Display/Adafruit_GFX_Library/Adafruit_GFX.h"    // Core graphics library
-#include "Module/Display/Adafruit_ST7735_and_ST7789_Library/Adafruit_ST7789.h" // Hardware-specific library for ST7789
+#include "Module/Display/Adafruit_GFX_Library/Adafruit_GFX.h"    
+#include "Module/Display/Adafruit_ST7735_and_ST7789_Library/Adafruit_ST7789.h" 
 #include "Module/Display/littlevglESP32/src/littlevglESP32.h";
 #include "Module/Joystick/TonySpace_Joystick.h"
 #include "Module/PCF8574/TEE_PCF8574.h"
+#include "Module/Camera/TonyCam.h"
 
 
 #include "Module/NBIoT/TonySpace_NBIoT.h"
@@ -36,3 +37,16 @@
 
 
 #endif
+
+
+
+
+
+
+
+
+
+
+
+
+
