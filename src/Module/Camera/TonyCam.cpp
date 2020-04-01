@@ -241,8 +241,17 @@ void  TonyCam::faceIDInit(face_id_list *l, uint8_t size, uint8_t confirm_times)
 void  TonyCam::faceIDInitFlash(face_id_list *l, uint8_t size, uint8_t confirm_times)
 {
 	initFatFS();
+	
 	if(availableFile(FACE_LIST_PATH))
 	{
+		size_t s = getFileSize(FACE_LIST_PATH);
+		if(s==0)
+		{	
+			deleteFaceLisFlash();
+			face_id_init(l, size, confirm_times);
+			return;
+		}
+		
 		readFaceListFromFlash(l);
 	}
 	else
@@ -280,6 +289,19 @@ void TonyCam::initialFile()
 		}
 		newfile.close();
     }
+}
+size_t TonyCam::getFileSize(const char * filename)
+{
+	 File file = FFat.open(filename);
+	 if(!file || file.isDirectory())
+	 {
+        Serial.println("- failed to open file for reading");
+        return 0 ;
+     }
+	 size_t s = file.size();
+	 return s;
+	
+	
 }
 bool TonyCam::availableFile(const char * filename)
 {

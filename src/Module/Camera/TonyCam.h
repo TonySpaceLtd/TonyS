@@ -65,6 +65,7 @@ public:
 	bool initFatFS();
 	void initialFile();
 	bool availableFile(const char * filename);
+	size_t getFileSize(const char * filename);
 	bool writeFaceListToFlash(face_id_list *l);
 	bool readFaceListFromFlash(face_id_list *l);
 	bool deleteFaceLisFlash();
