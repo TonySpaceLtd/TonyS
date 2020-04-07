@@ -417,7 +417,36 @@ bool TonyCam::deleteFaceLisFlash()
     }
 	return true;
 }
+size_t TonyCam::grayScale(dl_matrix3du_t *image_888,dl_matrix3du_t **gray)
+{
+	return (grayScale_(image_888,gray));
+}
 
-
-
+size_t grayScale_(dl_matrix3du_t *image_888,dl_matrix3du_t **gray)
+{
+	*gray = dl_matrix3du_alloc(1,image_888->w,image_888->h,1);
+	if (!*gray)
+		return(0);
+	(*gray)->w = image_888->w;
+	(*gray)->h = image_888->h;
+	(*gray)->c = 1;
+	size_t len = image_888->w * image_888->h * image_888->c;
+	size_t lengray=0;
+	for(size_t i=0;i<len;i+=3)
+	{
+		uint8_t r = image_888->item[i];
+		uint8_t g = image_888->item[i+1]; 
+		uint8_t b = image_888->item[i+2];
+		uint8_t m = max(r, g);
+		m = max(m,b);
+		uint8_t n = min(r, g);
+		n = min(n,b);
+		uint8_t gr = (m+n)/2;
+		
+		//uint8_t gr = (r*0.3)+(g*0.59)+(b*0.11);
+		(*gray)->item[lengray]=gr;
+		lengray++;	
+	}
+	return(lengray);
+}
 

@@ -70,10 +70,12 @@ public:
 	bool readFaceListFromFlash(face_id_list *l);
 	bool deleteFaceLisFlash();
 	
+	size_t grayScale(dl_matrix3du_t *image_888,dl_matrix3du_t **gray);
+	
 private:
 		
 };
-
+size_t grayScale_(dl_matrix3du_t *image_888,dl_matrix3du_t **gray);
 
 
 
