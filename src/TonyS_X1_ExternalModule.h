@@ -12,7 +12,7 @@
 #include "Module/Joystick/TonySpace_Joystick.h"
 #include "Module/PCF8574/TEE_PCF8574.h"
 #include "Module/Camera/TonyCam.h"
-#include "Module/Camera/TonyCam_QR.h"
+
 
 
 #include "Module/NBIoT/TonySpace_NBIoT.h"

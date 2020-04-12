@@ -2,7 +2,6 @@
 #include "TonyS_X1_ExternalModule.h"
 Adafruit_ST7789 tft = Adafruit_ST7789(SLOT1,TFT_240_240_OLD);
 TonyCam cam;
-TonyQRCode qr;
 #define BUTTON_QR 0
 
 static lv_img_dsc_t dsc_Img_1 ;
@@ -15,7 +14,6 @@ void setup()
   Serial.println(F("Initialized"));
   cam.begin(SLOT5);
   lvglInit(&tft);
-  qr.init(&cam);
 
   label1 = lv_label_create(lv_scr_act(), NULL);
   lv_label_set_long_mode(label1, LV_LABEL_LONG_BREAK);    
@@ -32,29 +30,23 @@ void loop()
      Serial.println("Capture Error");
      return;
   }
+  cam.findQR();
   dl_matrix3du_t *rgb888;
   dl_matrix3du_t *rgb565;
   if (cam.jpg2rgb(fb, &rgb888))
   {
-        Serial.printf("\r\nQR Read:");
-        qrResoult res = qr.recognition(rgb888);
-       if(res.status)
-       {
-          Serial.printf("");
-          Serial.printf("Version: %d\r\n", res.version);
-          Serial.printf("ECC level: %c\r\n",res.eccLevel);
-          Serial.printf("Mask: %d\r\n", res.mask);
-          Serial.println("Data type: "+ qr.dataType(res.dataType));
-          Serial.printf("Length: %d\r\n",res.length);
-          Serial.println("Payload: "+res.payload);
-          String str = "Payload: "+res.payload;
-          printtxt(str);
-       }
-       else
-       {
-          Serial.println("FAIL");
-           printtxt("QR Code not Found");
-       }
+    Serial.printf("\r\nQR Read:");
+    String qrData = cam.readQR();
+    if(qrData.length())
+    {
+       printtxt(qrData);
+       Serial.println("\r\n"+qrData);
+    }
+    else
+    {
+       printtxt("QR Code Not Found ");
+       Serial.println("Not Found ");
+    }
     cam.rgb888to565(&rgb565,rgb888);
     cam.clearMemory(rgb888);
     showPic(rgb565);

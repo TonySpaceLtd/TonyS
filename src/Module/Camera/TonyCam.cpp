@@ -69,6 +69,61 @@ camera_jpg* TonyCam::capture()
 	Serial.println("Capture Time out");
 	return &img;  
 }
+void TonyCam::findQR()
+{
+	camSer.print("READQR\n");
+	unsigned long pvt = millis();
+	do
+	{
+		 while(camSer.available())
+		{
+			String  str =  camSer.readStringUntil('\n');
+			if(str.indexOf("OK")!=-1)
+			{ 
+				return ;  
+			}
+		}
+	}
+	while((millis()-pvt)<5);
+	Serial.println("ReadQR Time out");
+	
+}
+String TonyCam::readQR()
+{
+	String out ;
+	out[0] = 0;
+	camSer.print("GETQRDATA\n");
+	unsigned long pvt = millis();
+	do
+	{
+		 while(camSer.available())
+		{
+			String  str =  camSer.readStringUntil('\n');
+			if(str.indexOf("SIZE")!=-1)
+			{ 
+				uint8_t len[4];
+				camSer.readBytes(len,4);
+				size_t s=0;
+				s =  (len[0]&0xFF); 
+				s |= (len[1]&0xFF)<<8;
+				s |= (len[2]&0xFF)<<16;
+				s |= (len[3]&0xFF)<<24;
+				if(s==0)
+					return(out);
+				uint8_t dataQR[s+1];
+				camSer.readBytes(dataQR,s);
+				//Serial.write(dataQR,s);
+				dataQR[s]=0;
+				String out = (char*)dataQR;
+				return(out) ;  
+			}
+		}
+	}
+	while((millis()-pvt)<5000);
+	Serial.println("QR Time out");
+	return(out);
+	
+}
 bool TonyCam::jpg2rgb(camera_jpg *fb, dl_matrix3du_t **image_matrix)
 {
 	*image_matrix = dl_matrix3du_alloc(1, fb->width, fb->height, 3);

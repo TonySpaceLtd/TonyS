@@ -72,6 +72,9 @@ public:
 	
 	size_t grayScale(dl_matrix3du_t *image_888,dl_matrix3du_t **gray);
 	
+	void findQR();
+	String readQR();
+	
 private:
 		
 };
