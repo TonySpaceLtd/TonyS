@@ -15,32 +15,32 @@ void Tony_RS485::slot(uint8_t slot)
 	switch(slot)
 	{
 		case  SLOT1 :
-			select_mode = IO1;
+			select_mode = IO0;
 			pin_RX = RX1;
 			pin_TX = TX1;
 			break;
 		case  SLOT2 :
-			select_mode = IO3;
+			select_mode = IO2;
 			pin_RX = RX1;
 			pin_TX = TX1;
 			break;
 		case  SLOT3 :
-			select_mode = IO5;
+			select_mode = IO4;
 			pin_RX = RX1;
 			pin_TX = TX1;
 			break;
 		case  SLOT4 :
-			select_mode = IO7;
+			select_mode = IO6;
 			pin_RX = RX2;
 			pin_TX = TX2;
 			break;
 		case  SLOT5 :
-			select_mode = IO9;
+			select_mode = IO8;
 			pin_RX = RX2;
 			pin_TX = TX2;
 			break;
 		case  SLOT6 :
-			select_mode = IO11;
+			select_mode = IO10;
 			pin_RX = RX2;
 			pin_TX = TX2;
 			break;
@@ -209,7 +209,7 @@ size_t Tony_RS485::write(uint8_t c)
 	else
 	{
 		uartWrite(_uart, c);
-		//delayMicroseconds(2000);
+		delayMicroseconds(2000);
 	}
     return 1;
 }
@@ -226,7 +226,7 @@ size_t Tony_RS485::write(const uint8_t *buffer, size_t size)
 	else
 	{
 		uartWriteBuf(_uart, buffer, size);
-		//delayMicroseconds(2000);
+		delayMicroseconds(2000);
 	}
     return size;
 }
@@ -245,11 +245,13 @@ void Tony_RS485::checkSerial(void)
 	//while there is more data in the UART than when last checked
 	while(RS485.available()> _len)
 	{
+		Serial.println(_len);   
 		_len = RS485.available();
 		//Wait for 3 bytewidths of data (SOM/EOM)
 		delay(_frameDelay);
 		//Check the UART again
 	}
+	Serial.println("Loop 2...");   
 }
 
 /*
@@ -323,17 +325,19 @@ bool Tony_RS485::requestData(uint8_t slave_ID, uint8_t function, uint16_t startA
 	
 	//initialize mesasge length
 	_len = 0;
-
+	Serial.println("Checking Serial");       
 	//check for data in the recieve buffer
 	this->checkSerial();
-    
+    Serial.println("Checked");    
 	
 	//if there is nothing in the recieve buffer, bail.
 	if(_len == 0)
 	{
 		return 0;
 	}
+	Serial.println("Reading...");   
 	//retrieve the query message from the serial uart
 	this->serialRx();
+	Serial.println("Done");   
 	return 1;
 }

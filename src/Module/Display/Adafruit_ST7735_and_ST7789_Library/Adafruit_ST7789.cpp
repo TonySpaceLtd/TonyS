@@ -1,6 +1,7 @@
 #include "Adafruit_ST77xx.h"
 #include "Adafruit_ST7789.h"
 #include <TonyS_X1.h>
+TonyS_X1 Tony_Display;
 // CONSTRUCTORS ************************************************************
 
 /*!
@@ -28,6 +29,12 @@ Adafruit_ST7789::Adafruit_ST7789(int8_t cs, int8_t dc, int8_t rst) :
 
 uint8_t find_cs(uint8_t slot)
 {
+	switch(slot)
+	{
+		case  SLOT1 :
+		Tony_Display.pinMode(IO10, OUTPUT);
+		Tony_Display.digitalWrite(IO10, LOW);
+	}
 	return IO_CS;
 }
 uint8_t find_dc(uint8_t slot,uint8_t type)

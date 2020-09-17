@@ -1,8 +1,10 @@
+// V.TS001
 #include "TonySpace_4_20mA.h"
 #include "TonyS_X1.h"
 
-MAX11301 MAX11301_1;
+TonyS_X1 Tony_4_20;
 
+extern byte board_model;
 
 T4_20mA::T4_20mA(uint8_t slot)
 {
@@ -47,12 +49,10 @@ T4_20mA::T4_20mA(uint8_t slot)
 	}	
 }
 
-
 uint16_t T4_20mA::readValue()
 {
 	uint16_t dataADC = 0;
-	MAX11301_1.Basic_Config_Port(pin, ADCtype1);  
-	dataADC = MAX11301_1.readADC(pin); 
+	dataADC = Tony_4_20.analogRead(pin);
 	return(dataADC);
 }
 

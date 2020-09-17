@@ -302,9 +302,9 @@ void MAX11301::Config_deviceControl()
 		if(i%40 == 0)
 		{
 			DAC_Compensate = 0;
-			Tony.offMAX11301();
+			Tony.offExtension();
 			delay(200);
-			Tony.onMAX11301();
+			Tony.onExtension();
 			delay(200);
 			Command_Config();
 			Basic_Config_Port_For_DACADC(18, 184);  // Config Port 18 to DAC with monitoring  (184 = 0.449V)

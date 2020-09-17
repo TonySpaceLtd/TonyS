@@ -26,7 +26,7 @@ void loop()
                 //RS485.get_byteNumber() = Get number of Data
   getByteNumber = RS485.get_byteNumber();
 
-  if(statusRequest = 1)
+  if(statusRequest == 1)
   {
     Serial.print("Data = ");
     for(uint8_t i = 0; i<getByteNumber; i++)
