@@ -11,7 +11,7 @@
 class Tony_RS485 : public Stream
 {
 public:
-    Tony_RS485(int uart_nr);
+    Tony_RS485();
 	void slot(uint8_t slot);
     void begin(unsigned long baud);
     void end();

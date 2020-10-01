@@ -7,8 +7,12 @@
 
 
 #if !defined(NO_GLOBAL_INSTANCES) && !defined(NO_GLOBAL_SERIAL)
-Tony_RS485 RS485(2);
+Tony_RS485 RS485;
 #endif
+
+Tony_RS485::Tony_RS485()
+{
+}
 
 void Tony_RS485::slot(uint8_t slot)
 {
@@ -18,67 +22,78 @@ void Tony_RS485::slot(uint8_t slot)
 			select_mode = IO0;
 			pin_RX = RX1;
 			pin_TX = TX1;
+			_uart_nr = 1;
 			break;
 		case  SLOT2 :
 			select_mode = IO2;
 			pin_RX = RX1;
 			pin_TX = TX1;
+			_uart_nr = 1;
 			break;
 		case  SLOT3 :
 			select_mode = IO4;
 			pin_RX = RX1;
 			pin_TX = TX1;
+			_uart_nr = 1;
 			break;
 		case  SLOT4 :
 			select_mode = IO6;
 			pin_RX = RX2;
 			pin_TX = TX2;
+			_uart_nr = 2;
 			break;
 		case  SLOT5 :
 			select_mode = IO8;
 			pin_RX = RX2;
 			pin_TX = TX2;
+			_uart_nr = 2;
 			break;
 		case  SLOT6 :
 			select_mode = IO10;
 			pin_RX = RX2;
 			pin_TX = TX2;
+			_uart_nr = 2;
 			break;
 		case  SLOT1_U :
 			select_mode = IO1;
 			pin_RX = RX1;
 			pin_TX = TX1;
+			_uart_nr = 1;
 			break;
 		case  SLOT2_U :
 			select_mode = IO3;
 			pin_RX = RX1;
 			pin_TX = TX1;
+			_uart_nr = 1;
 			break;
 		case  SLOT3_U :
 			select_mode = IO5;
 			pin_RX = RX1;
 			pin_TX = TX1;
+			_uart_nr = 1;
 			break;
 		case  SLOT4_U :
 			select_mode = IO7;
 			pin_RX = RX2;
 			pin_TX = TX2;
+			_uart_nr = 2;
 			break;
 		case  SLOT5_U :
 			select_mode = IO9;
 			pin_RX = RX2;
 			pin_TX = TX2;
+			_uart_nr = 2;
 			break;
 		case  SLOT6_U :
 			select_mode = IO11;
 			pin_RX = RX2;
 			pin_TX = TX2;
+			_uart_nr = 2;
 			break;
 	}	
 	Tony.pinMode(select_mode, OUTPUT);
 }
 
-Tony_RS485::Tony_RS485(int uart_nr) : _uart_nr(uart_nr), _uart(NULL) {}
 
 void Tony_RS485::begin(unsigned long baud)
 {

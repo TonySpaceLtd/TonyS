@@ -62,7 +62,7 @@ MAX11301 MAX;    //  Call Library's class
 void setup() 
 {
   
-  Serial.begin(115200);
+  Serial.begin(9600);
   Tony.begin();  //----  begin Library
   delay(10);
 

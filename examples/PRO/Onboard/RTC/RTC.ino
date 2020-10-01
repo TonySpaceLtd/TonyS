@@ -11,7 +11,7 @@ void setup () {
   while (!Serial); // for Leonardo/Micro/Zero
 #endif
 
-  Serial.begin(115200);
+  Serial.begin(9600);
 
   delay(3000); // wait for console opening
 

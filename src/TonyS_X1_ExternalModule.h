@@ -1,8 +1,8 @@
 #ifndef TonyS_X1_ExternalModule_h
 #define TonyS_X1_ExternalModule_h
 
-
-#include "Module/ADXL345/TonySpace_ADXL345.h"
+#include "Module/GPS/TonySpace_L86.h"
+#include "Module/Accelerometer/TonySpace_ADXL345.h"
 #include "Module/4_20mA/TonySpace_4_20mA.h"
 #include "Module/RS485/TonySpace_RS485.h"
 #include "Module/Adafruit_SHT31_Library/Adafruit_SHT31.h";

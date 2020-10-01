@@ -6,7 +6,7 @@ uint8_t pinADC[12] = {AIO0, AIO1, AIO2, AIO3, AIO4, AIO5, AIO6, AIO7, AIO8, AIO9
 
 void setup() 
 {
-  Serial.begin(115200);
+  Serial.begin(9600);
   Tony.begin();  //----  begin Library
   delay(10);
   MAX.defaultConfig(); // Config port

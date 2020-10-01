@@ -29,12 +29,6 @@ Adafruit_ST7789::Adafruit_ST7789(int8_t cs, int8_t dc, int8_t rst) :
 
 uint8_t find_cs(uint8_t slot)
 {
-	switch(slot)
-	{
-		case  SLOT1 :
-		Tony_Display.pinMode(IO10, OUTPUT);
-		Tony_Display.digitalWrite(IO10, LOW);
-	}
 	return IO_CS;
 }
 uint8_t find_dc(uint8_t slot,uint8_t type)
@@ -55,6 +49,18 @@ uint8_t find_dc(uint8_t slot,uint8_t type)
 				return IO8;
 			case  SLOT6 :
 				return IO10;
+			case  SLOT1_U :
+				return IO1;
+			case  SLOT2_U :
+				return IO3;
+			case  SLOT3_U :
+				return IO5;
+			case  SLOT4_U :
+				return IO7;
+			case  SLOT5_U :
+				return IO9;
+			case  SLOT6_U :
+				return IO11;
 		}
 	}
 	if(type == TFT_240_320)
@@ -69,6 +75,14 @@ uint8_t find_dc(uint8_t slot,uint8_t type)
 				return IO2;
 			case  SLOT5 :
 				return IO0;
+			case  SLOT1_U :
+				return IO9;
+			case  SLOT2_U :
+				return IO7;
+			case  SLOT4_U :
+				return IO3;
+			case  SLOT5_U :
+				return IO1;
 		}
 	}
 	return -1;
@@ -92,6 +106,18 @@ uint8_t find_rst(uint8_t slot,uint8_t type)
 				return AIO8;
 			case  SLOT6 :
 				return AIO10;
+			case  SLOT1_U :
+				return AIO1;
+			case  SLOT2_U :
+				return AIO3;
+			case  SLOT3_U :
+				return AIO5;
+			case  SLOT4_U :
+				return AIO7;
+			case  SLOT5_U :
+				return AIO9;
+			case  SLOT6_U :
+				return AIO11;
 		}
 	}
 	if(type == TFT_240_320)
@@ -106,6 +132,14 @@ uint8_t find_rst(uint8_t slot,uint8_t type)
 				return IO8;
 			case  SLOT5 :
 				return IO10;
+			case  SLOT1_U :
+				return IO3;
+			case  SLOT2_U :
+				return IO5;
+			case  SLOT4_U :
+				return IO9;
+			case  SLOT5_U :
+				return IO11;
 		}
 	}
 	
@@ -123,6 +157,103 @@ Adafruit_ST7789::Adafruit_ST7789(int8_t slot,uint8_t tfttype = TFT_240_240) :
 Adafruit_ST77xx(320, 240,find_cs(slot),find_dc(slot,tfttype),find_rst(slot,tfttype)) 
 {
 	_tfttype = tfttype;
+	if(tfttype == TFT_240_240)
+	{
+		switch(slot)
+		{
+			case  SLOT1 : 
+				Tony_Display.pinMode(IO10, OUTPUT);
+				Tony_Display.digitalWrite(IO10, LOW);
+				Tony_Display.pinMode(AIO10, OUTPUT);
+				Tony_Display.digitalWrite(AIO10, LOW);
+			case  SLOT2 : 
+				Tony_Display.pinMode(IO8, OUTPUT);
+				Tony_Display.digitalWrite(IO8, LOW);
+				Tony_Display.pinMode(AIO8, OUTPUT);
+				Tony_Display.digitalWrite(AIO8, LOW);
+			case  SLOT3 : 
+				Tony_Display.pinMode(IO6, OUTPUT);
+				Tony_Display.digitalWrite(IO6, LOW);
+				Tony_Display.pinMode(AIO6, OUTPUT);
+				Tony_Display.digitalWrite(AIO6, LOW);
+			case  SLOT4 : 
+				Tony_Display.pinMode(IO4, OUTPUT);
+				Tony_Display.digitalWrite(IO4, LOW);
+				Tony_Display.pinMode(AIO4, OUTPUT);
+				Tony_Display.digitalWrite(AIO4, LOW);
+			case  SLOT5 : 
+				Tony_Display.pinMode(IO2, OUTPUT);
+				Tony_Display.digitalWrite(IO2, LOW);
+				Tony_Display.pinMode(AIO2, OUTPUT);
+				Tony_Display.digitalWrite(AIO2, LOW);
+			case  SLOT6 : 
+				Tony_Display.pinMode(IO0, OUTPUT);
+				Tony_Display.digitalWrite(IO0, LOW);
+				Tony_Display.pinMode(AIO0, OUTPUT);
+				Tony_Display.digitalWrite(AIO0, LOW);
+			case  SLOT1_U : 
+				Tony_Display.pinMode(IO11, OUTPUT);
+				Tony_Display.digitalWrite(IO9, LOW);
+				Tony_Display.pinMode(AIO1, OUTPUT);
+				Tony_Display.digitalWrite(AIO1, LOW);
+			case  SLOT2_U : 
+				Tony_Display.pinMode(IO9, OUTPUT);
+				Tony_Display.digitalWrite(IO9, LOW);
+				Tony_Display.pinMode(AIO3, OUTPUT);
+				Tony_Display.digitalWrite(AIO3, LOW);
+			case  SLOT3_U : 
+				Tony_Display.pinMode(IO7, OUTPUT);
+				Tony_Display.digitalWrite(IO7, LOW);
+				Tony_Display.pinMode(AIO5, OUTPUT);
+				Tony_Display.digitalWrite(AIO5, LOW);
+			case  SLOT4_U : 
+				Tony_Display.pinMode(IO5, OUTPUT);
+				Tony_Display.digitalWrite(IO5, LOW);
+				Tony_Display.pinMode(AIO7, OUTPUT);
+				Tony_Display.digitalWrite(AIO7, LOW);
+			case  SLOT5_U : 
+				Tony_Display.pinMode(IO3, OUTPUT);
+				Tony_Display.digitalWrite(IO3, LOW);
+				Tony_Display.pinMode(AIO9, OUTPUT);
+				Tony_Display.digitalWrite(AIO9, LOW);
+			case  SLOT6_U : 
+				Tony_Display.pinMode(IO1, OUTPUT);
+				Tony_Display.digitalWrite(IO1, LOW);
+				Tony_Display.pinMode(AIO11, OUTPUT);
+				Tony_Display.digitalWrite(AIO11, LOW);
+		}
+	}
+	if(tfttype == TFT_240_320)
+	{
+		switch(slot)
+		{
+			case  SLOT1 :
+				Tony_Display.pinMode(IO10, OUTPUT);
+				Tony_Display.digitalWrite(IO10, HIGH);
+			case  SLOT2 :
+				Tony_Display.pinMode(IO8, OUTPUT);
+				Tony_Display.digitalWrite(IO8, HIGH);
+			case  SLOT4 :
+				Tony_Display.pinMode(IO4, OUTPUT);
+				Tony_Display.digitalWrite(IO4, HIGH);
+			case  SLOT5 :
+				Tony_Display.pinMode(IO2, OUTPUT);
+				Tony_Display.digitalWrite(IO2, HIGH);
+			case  SLOT1_U :
+				Tony_Display.pinMode(IO11, OUTPUT);
+				Tony_Display.digitalWrite(IO11, HIGH);
+			case  SLOT2_U :
+				Tony_Display.pinMode(IO9, OUTPUT);
+				Tony_Display.digitalWrite(IO9, HIGH);
+			case  SLOT4_U :
+				Tony_Display.pinMode(IO5, OUTPUT);
+				Tony_Display.digitalWrite(IO5, HIGH);
+			case  SLOT5_U :
+				Tony_Display.pinMode(IO3, OUTPUT);
+				Tony_Display.digitalWrite(IO3, HIGH);
+			
+		}
+	}
 }
 
 
