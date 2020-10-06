@@ -9,7 +9,7 @@ uint16_t updown = 0;
 void setup() 
 {
   
-  Serial.begin(9600);
+  Serial.begin(115200);
   Tony.begin();  //----  begin Library
   delay(10);
 
