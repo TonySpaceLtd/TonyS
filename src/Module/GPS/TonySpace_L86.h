@@ -59,6 +59,7 @@ public:
   TONY_GPS();
   void slot(uint8_t slot);
   void begin(unsigned long baud);
+  void GPS_ForceOn(bool force_on);
   bool encode(char c); // process one character received from GPS
   TONY_GPS &operator << (char c) {encode(c); return *this;}
 
@@ -186,7 +187,8 @@ private:
   
 protected:
 	uint8_t pin_RX, 
-			pin_TX;
+			pin_TX,
+			pin_force_on;
     int _uart_nr;
     uart_t* _uart;
 	word _baud;

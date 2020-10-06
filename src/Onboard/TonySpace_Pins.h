@@ -42,6 +42,8 @@ static const uint8_t IO14 = 112; // ON-OFF MAX11301's Power
 static const uint8_t IO15 = 18; // ON-OFF Relay 1
 static const uint8_t IO16 = 19; // ON-OFF Relay 2
 
+#define  RX0  		    3   
+#define  TX0  		    1   
 #define  RX1  		    34   
 #define  TX1  		    32   
 #define  RX2  		    35   

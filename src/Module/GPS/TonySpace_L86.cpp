@@ -64,18 +64,82 @@ TONY_GPS::TONY_GPS()
 
 void TONY_GPS::slot(uint8_t slot)
 {
-	if(slot==SLOT1 || slot==SLOT2 || slot==SLOT3)
+	switch(slot)
 	{
-		pin_RX = RX1;
-		pin_TX = TX1;
-		_uart_nr = 1;
-	}
-	else if(slot==SLOT4 || slot==SLOT5 || slot==SLOT6)
-	{
-		pin_RX = RX2;
-		pin_TX = TX2;
-		_uart_nr = 2;
-	}
+		case  SLOT1 :
+			pin_force_on = IO0;
+			pin_RX = RX1;
+			pin_TX = TX1;
+			_uart_nr = 1;
+			break;
+		case  SLOT2 :
+			pin_force_on = IO2;
+			pin_RX = RX1;
+			pin_TX = TX1;
+			_uart_nr = 1;
+			break;
+		case  SLOT3 :
+			pin_force_on = IO4;
+			pin_RX = RX1;
+			pin_TX = TX1;
+			_uart_nr = 1;
+			break;
+		case  SLOT4 :
+			pin_force_on = IO6;
+			pin_RX = RX2;
+			pin_TX = TX2;
+			_uart_nr = 2;
+			break;
+		case  SLOT5 :
+			pin_force_on = IO8;
+			pin_RX = RX2;
+			pin_TX = TX2;
+			_uart_nr = 2;
+			break;
+		case  SLOT6 :
+			pin_force_on = IO10;
+			pin_RX = RX2;
+			pin_TX = TX2;
+			_uart_nr = 2;
+			break;
+		case  SLOT1_U :
+			pin_force_on = IO1;
+			pin_RX = RX1;
+			pin_TX = TX1;
+			_uart_nr = 1;
+			break;
+		case  SLOT2_U :
+			pin_force_on = IO3;
+			pin_RX = RX1;
+			pin_TX = TX1;
+			_uart_nr = 1;
+			break;
+		case  SLOT3_U :
+			pin_force_on = IO5;
+			pin_RX = RX1;
+			pin_TX = TX1;
+			_uart_nr = 1;
+			break;
+		case  SLOT4_U :
+			pin_force_on = IO7;
+			pin_RX = RX2;
+			pin_TX = TX2;
+			_uart_nr = 2;
+			break;
+		case  SLOT5_U :
+			pin_force_on = IO9;
+			pin_RX = RX2;
+			pin_TX = TX2;
+			_uart_nr = 2;
+			break;
+		case  SLOT6_U :
+			pin_force_on = IO11;
+			pin_RX = RX2;
+			pin_TX = TX2;
+			_uart_nr = 2;
+			break;
+	}	
+	Tony.pinMode(pin_force_on, OUTPUT);
 }
 
 void TONY_GPS::begin(unsigned long baud)
@@ -85,17 +149,16 @@ void TONY_GPS::begin(unsigned long baud)
 	int8_t txPin = pin_TX;
 	bool invert = false;
 	unsigned long timeout_ms = 20000UL;
+	Tony.digitalWrite(pin_force_on, HIGH);
 	
     if(0 > _uart_nr || _uart_nr > 2) {
         log_e("Serial number is invalid, please use 0, 1 or 2");
         return;
     }
-    if(_uart) {
-        end();
-    }
+
     if(_uart_nr == 0 && rxPin < 0 && txPin < 0) {
-        rxPin = 3;
-        txPin = 1;
+        rxPin = NULL;
+        txPin = NULL;
     }
     if(_uart_nr == 1 && rxPin < 0 && txPin < 0) {
         rxPin = RX1;
@@ -115,8 +178,6 @@ void TONY_GPS::begin(unsigned long baud)
             yield();
         }
 
-        end();
-
         if(detectedBaudRate) {
             delay(100); // Give some time...
             _uart = uartBegin(_uart_nr, detectedBaudRate, config, rxPin, txPin, 256, invert);
@@ -125,6 +186,12 @@ void TONY_GPS::begin(unsigned long baud)
             _uart = NULL;
         }
     }
+}
+
+void TONY_GPS::GPS_ForceOn(bool force_on)
+{
+	if(force_on == 1) Tony.digitalWrite(pin_force_on, HIGH);
+	else Tony.digitalWrite(pin_force_on, LOW);
 }
 
 void TONY_GPS::updateBaudRate(unsigned long baud)

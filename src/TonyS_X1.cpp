@@ -442,12 +442,14 @@ void TonyS_X1::handleData(uint8_t pin)
 
 HardwareSerial TonyS_X1:: SerialBegin(uint8_t slot,unsigned long baud, uint32_t config, int8_t rxPin, int8_t txPin, bool invert, unsigned long timeout_ms) 
 {		
-	if(slot <=SLOT3_U)
+	if(slot==SLOT1 || slot==SLOT1_U || slot==SLOT2 || slot==SLOT2_U || slot==SLOT3 || slot==SLOT3_U)
 	{
 		Serial1.begin(baud,config,RX1,TX1,invert,timeout_ms);
 		return(Serial1);
 	}
-	Serial2.begin(baud,config,RX2,TX2,invert,timeout_ms);
-	return(Serial2);
-	
+	else if(slot==SLOT4 || slot==SLOT4_U || slot==SLOT5 || slot==SLOT5_U || slot==SLOT6 || slot==SLOT6_U)
+	{
+		Serial2.begin(baud,config,RX2,TX2,invert,timeout_ms);
+		return(Serial2);
+	}
 }

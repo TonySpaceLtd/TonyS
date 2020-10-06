@@ -1,26 +1,52 @@
-#include <SoftwareSerial.h>
-
-#include <TinyGPS.h>
-
-/* This sample code demonstrates the normal use of a TinyGPS object.
-   It requires the use of SoftwareSerial, and assumes that you have a
-   4800-baud serial GPS device hooked up on pins 4(rx) and 3(tx).
+#include "TonyS_X1.h"
+#include "TonyS_X1_ExternalModule.h"
+/* 
+  TONY_GPS = Class
+  TonyGPS = User defined name
 */
 
-TinyGPS gps;
-SoftwareSerial ss(4, 3);
+uint16_t checkSleep = 500;
 
 void setup()
 {
-  Serial.begin(115200);
-  ss.begin(4800);
-  
-  Serial.print("Simple TinyGPS library v. "); Serial.println(TinyGPS::library_version());
-  Serial.println("by Mikal Hart");
+  Serial.begin(9600);
+  Tony.begin();  //----  begin Library
+  //--------- GPS Module Config ---------//
+  TonyGPS.slot(SLOT1);    //  Select slot such as SLOT1, SLOT1_U, SLOT2, SLOT2_U, SLOT3, SLOT3_U ...
+                          //  SLOTx_U = Floor 2
+  TonyGPS.begin(9600);    //  Select buad rate 
+  TonyGPS.GPS_ForceOn(1); // 1 = Enable GPS  , 0 = Disable GPS
+//--------------------------------------//
+  Serial.print("Simple TinyGPS library v. "); Serial.println(TONY_GPS::library_version());
   Serial.println();
+  readGPS();
 }
 
 void loop()
+{
+  Serial.println("\r\n\r\n");
+  Serial.println("Go to Standby mode");
+  while (!TonyGPS);
+  TonyGPS.print( F("$PMTK161,0*28\r\n") );
+  delay(100);
+  for(uint8_t i = 0; i<10; i++)
+  {
+    readGPS();
+  }
+
+  delay(100);
+  Serial.println("\r\n\r\n");
+  Serial.println("Go to Full mode");
+  TonyGPS.println("Wake-up please");
+  delay(1000);
+  for(uint8_t i = 0; i<10; i++)
+  {
+    readGPS();
+  }
+  delay(1000);
+}
+
+void readGPS()
 {
   bool newData = false;
   unsigned long chars;
@@ -29,11 +55,11 @@ void loop()
   // For one second we parse GPS data and report some key values
   for (unsigned long start = millis(); millis() - start < 1000;)
   {
-    while (ss.available())
+    while (TonyGPS.available())
     {
-      char c = ss.read();
-      // Serial.write(c); // uncomment this line if you want to see the GPS data flowing
-      if (gps.encode(c)) // Did a new valid sentence come in?
+      char c = TonyGPS.read();
+       Serial.write(c); // uncomment this line if you want to see the GPS data flowing
+      if (TonyGPS.encode(c)) // Did a new valid sentence come in?
         newData = true;
     }
   }
@@ -42,18 +68,18 @@ void loop()
   {
     float flat, flon;
     unsigned long age;
-    gps.f_get_position(&flat, &flon, &age);
+    TonyGPS.f_get_position(&flat, &flon, &age);
     Serial.print("LAT=");
-    Serial.print(flat == TinyGPS::GPS_INVALID_F_ANGLE ? 0.0 : flat, 6);
+    Serial.print(flat == TONY_GPS::GPS_INVALID_F_ANGLE ? 0.0 : flat, 6);
     Serial.print(" LON=");
-    Serial.print(flon == TinyGPS::GPS_INVALID_F_ANGLE ? 0.0 : flon, 6);
+    Serial.print(flon == TONY_GPS::GPS_INVALID_F_ANGLE ? 0.0 : flon, 6);
     Serial.print(" SAT=");
-    Serial.print(gps.satellites() == TinyGPS::GPS_INVALID_SATELLITES ? 0 : gps.satellites());
+    Serial.print(TonyGPS.satellites() == TONY_GPS::GPS_INVALID_SATELLITES ? 0 : TonyGPS.satellites());
     Serial.print(" PREC=");
-    Serial.print(gps.hdop() == TinyGPS::GPS_INVALID_HDOP ? 0 : gps.hdop());
+    Serial.print(TonyGPS.hdop() == TONY_GPS::GPS_INVALID_HDOP ? 0 : TonyGPS.hdop());
   }
   
-  gps.stats(&chars, &sentences, &failed);
+  TonyGPS.stats(&chars, &sentences, &failed);
   Serial.print(" CHARS=");
   Serial.print(chars);
   Serial.print(" SENTENCES=");
@@ -61,5 +87,8 @@ void loop()
   Serial.print(" CSUM ERR=");
   Serial.println(failed);
   if (chars == 0)
+  {
     Serial.println("** No characters received from GPS: check wiring **");
+  }
+  checkSleep = chars;
 }

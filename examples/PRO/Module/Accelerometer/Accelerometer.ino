@@ -28,7 +28,7 @@
 #include <TonyS_X1_ExternalModule.h>
 
 
-TONY_ADXL345 TonyAc; //variable TonyAc is an instance of the TonyAc345 library
+TONY_ADXL345 TonyAc; 
 
 void setup(){
   
