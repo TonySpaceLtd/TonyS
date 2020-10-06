@@ -9,7 +9,7 @@ uint16_t checkSleep = 500;
 
 void setup()
 {
-  Serial.begin(9600);
+  Serial.begin(115200);
   Tony.begin();  //----  begin Library
   //--------- GPS Module Config ---------//
   TonyGPS.slot(SLOT1);    //  Select slot such as SLOT1, SLOT1_U, SLOT2, SLOT2_U, SLOT3, SLOT3_U ...
