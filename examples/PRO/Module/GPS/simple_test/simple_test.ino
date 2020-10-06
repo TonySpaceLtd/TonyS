@@ -88,7 +88,7 @@ void readGPS()
   Serial.println(failed);
   if (chars == 0)
   {
-    Serial.println("** No characters received from GPS: check wiring **");
+    Serial.println("** No characters received from GPS **");
   }
   checkSleep = chars;
 }
