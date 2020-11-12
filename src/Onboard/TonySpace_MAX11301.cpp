@@ -211,64 +211,64 @@ void MAX11301::defaultConfig()
 	
 	
 	// DAC data register
-	writeDAC(0, 4095);
+	writeDAC(0, 0);
 	delay(1);
 	
-	writeDAC(1, 4095);
+	writeDAC(1, 0);
 	delay(1);
 	
-	writeDAC(2, 4095);
+	writeDAC(2, 0);
 	delay(1);
 	
-	writeDAC(3, 4095);
+	writeDAC(3, 0);
 	delay(1);
 	
-	writeDAC(4, 4095);
+	writeDAC(4, 0);
 	delay(1);
 	
-	writeDAC(5, 4095);
+	writeDAC(5, 0);
 	delay(1);
 	
-	writeDAC(6, 4095);
+	writeDAC(6, 0);
 	delay(1);
 	
-	writeDAC(7, 4095);
+	writeDAC(7, 0);
 	delay(1);
 	
-	writeDAC(8, 4095);
+	writeDAC(8, 0);
 	delay(1);
 	
-	writeDAC(9, 4095);
+	writeDAC(9, 0);
 	delay(1);
 	
-	writeDAC(10, 4095);
+	writeDAC(10, 0);
 	delay(1);
 	
-	writeDAC(11, 4095);
+	writeDAC(11, 0);
 	delay(1);
 	
-	writeDAC(12, 4095);
+	writeDAC(12, 0);
 	delay(1);
 	
-	writeDAC(13, 4095);
+	writeDAC(13, 0);
 	delay(1);
 	
-	writeDAC(14, 4095);
+	writeDAC(14, 0);
 	delay(1);
 	
-	writeDAC(15, 4095);
+	writeDAC(15, 0);
 	delay(1);
 	
-	writeDAC(16, 4095);
+	writeDAC(16, 0);
 	delay(1);
 	
-	writeDAC(17, 4095);
+	writeDAC(17, 0);
 	delay(1);
 	
-	writeDAC(18, 184);
+	writeDAC(18, 0);
 	delay(1);
 	
-	writeDAC(19, 4095);
+	writeDAC(19, 0);
 	delay(1);
 }
 
