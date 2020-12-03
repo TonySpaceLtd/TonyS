@@ -260,13 +260,12 @@ void Tony_RS485::checkSerial(void)
 	//while there is more data in the UART than when last checked
 	while(RS485.available()> _len)
 	{
-		Serial.println(_len);   
+		//Serial.println(_len);   
 		_len = RS485.available();
 		//Wait for 3 bytewidths of data (SOM/EOM)
 		delay(_frameDelay);
 		//Check the UART again
-	}
-	Serial.println("Loop 2...");   
+	}  
 }
 
 /*
@@ -340,10 +339,10 @@ bool Tony_RS485::requestData(uint8_t slave_ID, uint8_t function, uint16_t startA
 	
 	//initialize mesasge length
 	_len = 0;
-	Serial.println("Checking Serial");       
+	//Serial.println("Checking Serial");       
 	//check for data in the recieve buffer
 	this->checkSerial();
-    Serial.println("Checked");    
+    //Serial.println("Checked");    
 	
 	//if there is nothing in the recieve buffer, bail.
 	if(_len == 0)
@@ -353,6 +352,6 @@ bool Tony_RS485::requestData(uint8_t slave_ID, uint8_t function, uint16_t startA
 	Serial.println("Reading...");   
 	//retrieve the query message from the serial uart
 	this->serialRx();
-	Serial.println("Done");   
+	//Serial.println("Done");   
 	return 1;
 }
