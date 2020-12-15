@@ -1,6 +1,7 @@
 #ifndef TonyS_X1_ExternalModule_h
 #define TonyS_X1_ExternalModule_h
 
+#include "Module/FRAM/TonySpace_FRAM.h"
 #include "Module/GPS/TonySpace_L86.h"
 #include "Module/Accelerometer/TonySpace_ADXL345.h"
 #include "Module/4_20mA/TonySpace_4_20mA.h"
@@ -31,6 +32,12 @@
 #include "Module/3G/UC20_SMS.h"
 #include "Module/3G/UC_MQTT.h"
 
+#include "Module/4G/EC25_lib.h"
+#include "Module/4G/EC25_TCP.h"
+#include "Module/4G/EC25_MQTT.h"
+#include "Module/4G/EC25_LineNotify.h"
+#include "Module/4G/EC25_HTTP.h"
+#include "Module/4G/EC25_FILE.h"
 
 #include "Module/Maxsonar/TonySpace_Maxsonar.h"
 

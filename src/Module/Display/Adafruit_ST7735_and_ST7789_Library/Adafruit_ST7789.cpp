@@ -68,7 +68,7 @@ uint8_t find_dc(uint8_t slot,uint8_t type)
 		switch(slot)
 		{
 			case  SLOT1 :
-				return IO8;
+				return IO1;
 			case  SLOT2 :
 				return IO6;
 			case  SLOT4 :
@@ -228,11 +228,15 @@ Adafruit_ST77xx(320, 240,find_cs(slot),find_dc(slot,tfttype),find_rst(slot,tftty
 		switch(slot)
 		{
 			case  SLOT1 :
-				Tony_Display.pinMode(IO10, OUTPUT);
-				Tony_Display.digitalWrite(IO10, HIGH);
+				Tony_Display.pinMode(IO0, OUTPUT);
+				Tony_Display.digitalWrite(IO0, LOW);
+				Tony_Display.pinMode(AIO10, OUTPUT);
+				Tony_Display.digitalWrite(AIO10, LOW);
 			case  SLOT2 :
-				Tony_Display.pinMode(IO8, OUTPUT);
-				Tony_Display.digitalWrite(IO8, HIGH);
+				Tony_Display.pinMode(IO0, OUTPUT);
+				Tony_Display.digitalWrite(IO2, LOW);
+				Tony_Display.pinMode(AIO10, OUTPUT);
+				Tony_Display.digitalWrite(AIO8, LOW);
 			case  SLOT4 :
 				Tony_Display.pinMode(IO4, OUTPUT);
 				Tony_Display.digitalWrite(IO4, HIGH);
