@@ -1,6 +1,7 @@
 #ifndef TonyS_X1_ExternalModule_h
 #define TonyS_X1_ExternalModule_h
 
+#include "Module/Tact_Switch/TonySpace_TactSwitch.h"
 #include "Module/FRAM/TonySpace_FRAM.h"
 #include "Module/GPS/TonySpace_L86.h"
 #include "Module/Accelerometer/TonySpace_ADXL345.h"

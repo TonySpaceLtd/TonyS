@@ -69,16 +69,24 @@ void readGPS()
     float flat, flon;
     unsigned long age;
     TonyGPS.f_get_position(&flat, &flon, &age);
+    
     Serial.print("LAT=");
-    Serial.print(flat == TONY_GPS::GPS_INVALID_F_ANGLE ? 0.0 : flat, 6);
+    if(flat == TONY_GPS::GPS_INVALID_F_ANGLE)Serial.print(0.0);
+    else Serial.print(flat, 6);
+
     Serial.print(" LON=");
-    Serial.print(flon == TONY_GPS::GPS_INVALID_F_ANGLE ? 0.0 : flon, 6);
+    if(flon == TONY_GPS::GPS_INVALID_F_ANGLE)Serial.print(0.0);
+    else Serial.print(flon, 6);
+
     Serial.print(" SAT=");
-    Serial.print(TonyGPS.satellites() == TONY_GPS::GPS_INVALID_SATELLITES ? 0 : TonyGPS.satellites());
-    Serial.print(" PREC=");
-    Serial.print(TonyGPS.hdop() == TONY_GPS::GPS_INVALID_HDOP ? 0 : TonyGPS.hdop());
-  }
+    if(TonyGPS.satellites() == TONY_GPS::GPS_INVALID_SATELLITES)Serial.print(0);
+    else Serial.print(TonyGPS.satellites());
   
+    Serial.print(" PREC=");
+    if(TonyGPS.hdop() == TONY_GPS::GPS_INVALID_HDOP)Serial.print(0);
+    else Serial.print(TonyGPS.hdop());
+  }
+
   TonyGPS.stats(&chars, &sentences, &failed);
   Serial.print(" CHARS=");
   Serial.print(chars);

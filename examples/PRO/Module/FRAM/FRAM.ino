@@ -27,22 +27,21 @@ void setup()
   
   //--------------- Read --------------//
   //Read data : Address (0 - 511)  4 Byte per time
-  uint32_t readdata = TonyFRAM.read(0);  //4 bytes of data stored in variable
+  uint32_t readdata = TonyFRAM.read(0);  //4 bytes of data for stored in variable
    
 
-   //------------ Check Size -----------//
-   //Check blank Address (It'll return first of blank address , if return = 1000 That's mean FRAM full 
-   //Check step 4 Byte
-   sizeFRAM = TonyFRAM.size(4);
-   if(sizeFRAM == 512)  // Full chip = 512 byte , 0-511 byte
-   {     
+  //------------ Check Size -----------//
+  //Check blank Address (It'll return first of blank address , if return = 512 That's mean FRAM full 
+  //Check step 4 Byte
+  sizeFRAM = TonyFRAM.size(4);
+  if(sizeFRAM == 512)  // Full chip = 512 byte , 0-511 byte
+  {        
     Serial.println("Data Full");
-   }
-   else 
-   {
-    //Serial.println(sizeFRAM , HEX);
-   }
-
+  }
+  else 
+  {
+    Serial.println(sizeFRAM , HEX);
+  }
 }
 
 void loop() 
