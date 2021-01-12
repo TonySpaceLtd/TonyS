@@ -27,7 +27,7 @@ void setup()
     Tony.begin();       //-----  begin Main Library
 
     /*
-    The LED RGB only supports SLOT1, SLOT2, SLOT6, SLOT1_U, SLOT2_U, SLOT6_U
+	  The LED RGB only supports SLOT1, SLOT2, SLOT6, SLOT1_U, SLOT2_U, SLOT6_U
     */
     TonyPM.slot(SLOT1); //-----  Select Slot
     TonyPM.begin();     //-----  Begin PM's Library
