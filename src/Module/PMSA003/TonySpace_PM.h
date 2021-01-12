@@ -1,7 +1,81 @@
+/*  --------------------------------------------------------------------
+	Cr.Alvaro Valdebenito for PM's Library 
+	Cr.Adafruit for NeoPixel's Library
+    --------------------------------------------------------------------*/
 #ifndef TonySpace_PM_h
 #define TonySpace_PM_h
 
-#include <Arduino.h>
+#if (ARDUINO >= 100)
+    #include <Arduino.h>
+#else
+    #include <WProgram.h>
+    #include <pins_arduino.h>
+#endif
+
+// RGB NeoPixel permutations; white and red offsets are always same
+// Offset:         W          R          G          B   // HEX representation
+#define NEO_RGB  ((0 << 6) | (0 << 4) | (1 << 2) | (2)) // 0x06
+#define NEO_RBG  ((0 << 6) | (0 << 4) | (2 << 2) | (1)) // 0x09
+#define NEO_GRB  ((1 << 6) | (1 << 4) | (0 << 2) | (2)) // 0x52
+#define NEO_GBR  ((2 << 6) | (2 << 4) | (0 << 2) | (1)) // 0xA1
+#define NEO_BRG  ((1 << 6) | (1 << 4) | (2 << 2) | (0)) // 0x58
+#define NEO_BGR  ((2 << 6) | (2 << 4) | (1 << 2) | (0)) // 0xA4
+
+// RGBW NeoPixel permutations; all 4 offsets are distinct
+// Offset:         W          R          G          B   // HEX representation
+#define NEO_WRGB ((0 << 6) | (1 << 4) | (2 << 2) | (3)) // 0x1B
+#define NEO_WRBG ((0 << 6) | (1 << 4) | (3 << 2) | (2)) // 0x1E
+#define NEO_WGRB ((0 << 6) | (2 << 4) | (1 << 2) | (3)) // 0x27
+#define NEO_WGBR ((0 << 6) | (3 << 4) | (1 << 2) | (2)) // 0x36
+#define NEO_WBRG ((0 << 6) | (2 << 4) | (3 << 2) | (1)) // 0x2D
+#define NEO_WBGR ((0 << 6) | (3 << 4) | (2 << 2) | (1)) // 0x39
+
+#define NEO_RWGB ((1 << 6) | (0 << 4) | (2 << 2) | (3)) // 0x4B
+#define NEO_RWBG ((1 << 6) | (0 << 4) | (3 << 2) | (2)) // 0x4E
+#define NEO_RGWB ((2 << 6) | (0 << 4) | (1 << 2) | (3)) // 0x87
+#define NEO_RGBW ((3 << 6) | (0 << 4) | (1 << 2) | (2)) // 0xC6
+#define NEO_RBWG ((2 << 6) | (0 << 4) | (3 << 2) | (1)) // 0x8D
+#define NEO_RBGW ((3 << 6) | (0 << 4) | (2 << 2) | (1)) // 0xC9
+
+#define NEO_GWRB ((1 << 6) | (2 << 4) | (0 << 2) | (3)) // 0x63
+#define NEO_GWBR ((1 << 6) | (3 << 4) | (0 << 2) | (2)) // 0x72
+#define NEO_GRWB ((2 << 6) | (1 << 4) | (0 << 2) | (3)) // 0x93
+#define NEO_GRBW ((3 << 6) | (1 << 4) | (0 << 2) | (2)) // 0xD2
+#define NEO_GBWR ((2 << 6) | (3 << 4) | (0 << 2) | (1)) // 0xB1
+#define NEO_GBRW ((3 << 6) | (2 << 4) | (0 << 2) | (1)) // 0xE1
+
+#define NEO_BWRG ((1 << 6) | (2 << 4) | (3 << 2) | (0)) // 0x6C
+#define NEO_BWGR ((1 << 6) | (3 << 4) | (2 << 2) | (0)) // 0x78
+#define NEO_BRWG ((2 << 6) | (1 << 4) | (3 << 2) | (0)) // 0x9C
+#define NEO_BRGW ((3 << 6) | (1 << 4) | (2 << 2) | (0)) // 0xD8
+#define NEO_BGWR ((2 << 6) | (3 << 4) | (1 << 2) | (0)) // 0xB4
+#define NEO_BGRW ((3 << 6) | (2 << 4) | (1 << 2) | (0)) // 0xE4
+
+// Add NEO_KHZ400 to the color order value to indicate a 400 KHz
+// device.  All but the earliest v1 NeoPixels expect an 800 KHz data
+// stream, this is the default if unspecified.  Because flash space
+// is very limited on ATtiny devices (e.g. Trinket, Gemma), v1
+// NeoPixels aren't handled by default on those chips, though it can
+// be enabled by removing the ifndef/endif below -- but code will be
+// bigger.  Conversely, can disable the NEO_KHZ400 line on other MCUs
+// to remove v1 support and save a little space.
+
+#define NEO_KHZ800 0x0000 // 800 KHz datastream
+#ifndef __AVR_ATtiny85__
+    #define NEO_KHZ400 0x0100 // 400 KHz datastream
+#endif
+
+// If 400 KHz support is enabled, the third parameter to the constructor
+// requires a 16-bit value (in order to select 400 vs 800 KHz speed).
+// If only 800 KHz is enabled (as is default on ATtiny), an 8-bit value
+// is sufficient to encode pixel color order, saving some space.
+
+#ifdef NEO_KHZ400
+    typedef uint16_t neoPixelType;
+#else
+    typedef uint8_t  neoPixelType;
+#endif
+
 
 
 enum PMS
@@ -108,35 +182,82 @@ public:
   inline uint16_t bytes_read() { return nbytes; }
 #endif
 
+	//----------------------- RGB -----------------------//
+	void show(void);
+    void setPin(uint8_t p);
+    void setPixelColor(uint16_t n, uint8_t r, uint8_t g, uint8_t b);
+    void setPixelColor(uint16_t n, uint8_t r, uint8_t g, uint8_t b, uint8_t w);
+    void setPixelColor(uint16_t n, uint32_t c);
+    void fill(uint32_t c = 0, uint16_t first = 0, uint16_t count = 0);
+    void setBrightness(uint8_t);
+    void clear();
+    void updateLength(uint16_t n);
+    void updateType(neoPixelType t);
+    uint8_t * getPixels(void) const;
+    uint8_t getBrightness(void) const;
+    uint8_t sine8(uint8_t) const;
+    uint8_t gamma8(uint8_t) const;
+    int8_t getPin(void) {
+        return rgb_pin;
+    };
+    uint16_t numPixels(void) const;
+    static uint32_t Color(uint8_t r, uint8_t g, uint8_t b);
+    static uint32_t Color(uint8_t r, uint8_t g, uint8_t b, uint8_t w);
+    uint32_t getPixelColor(uint16_t n) const;
+    inline bool canShow(void) {
+        return (micros() - endTime) >= 300L;
+    }
+
 protected:
-  Stream *uart;  // hardware/software serial
-  PMS pms;       // sensor type/message protocol
-  bool hwSerial; // Is uart hardware serial? (or software serial)
-  uint8_t pin_RX, 
+	Stream *uart;  // hardware/software serial
+	PMS pms;       // sensor type/message protocol
+	bool hwSerial; // Is uart hardware serial? (or software serial)
+	uint8_t pin_RX, 
 		  pin_TX;
 
-  // Correct Temperature & Humidity
-  float temp_offset = 0.0;
-  float rhum_offset = 0.0;
+	// Correct Temperature & Humidity
+	float temp_offset = 0.0;
+	float rhum_offset = 0.0;
 
-  // utility functions
-  STATUS trigRead();
-  bool checkBuffer(size_t bufferLen);
-  void decodeBuffer(bool tsi_mode, bool truncated_num);
+	// utility functions
+	STATUS trigRead();
+	bool checkBuffer(size_t bufferLen);
+	void decodeBuffer(bool tsi_mode, bool truncated_num);
 
-  // message timing
-  static const uint16_t max_wait_ms = 1000;
-  uint16_t wait_ms; // time spent waiting for new sample
+	// message timing
+	static const uint16_t max_wait_ms = 1000;
+	uint16_t wait_ms; // time spent waiting for new sample
 
-  // message buffer
-  static const uint8_t BUFFER_LEN = 40;
-  uint8_t buffer[BUFFER_LEN], nbytes;
-  inline uint16_t buff2word(uint8_t n) { return (buffer[n] << 8) | buffer[n + 1]; }
+	// message buffer
+	static const uint8_t BUFFER_LEN = 40;
+	uint8_t buffer[BUFFER_LEN], nbytes;
+	inline uint16_t buff2word(uint8_t n) { return (buffer[n] << 8) | buffer[n + 1]; }
+  
+  //-------------- RGB ------------//
+	boolean
+	#ifdef NEO_KHZ400  // If 400 KHz NeoPixel support enabled...
+	is800KHz,      // ...true if 800 KHz pixels
+	#endif
+	begun;         // true if begin() previously called
+	uint16_t
+	numLEDs,       // Number of RGB LEDs in strip
+	numBytes;      // Size of 'pixels' buffer below (3 or 4 bytes/pixel)
+	int8_t
+	rgb_pin;           // Output pin number (-1 if not yet set)
+	uint8_t
+	brightness,
+	*pixels,        // Holds LED color values (3 or 4 bytes each)
+	rOffset,       // Index of red byte within each 3- or 4-byte pixel
+	gOffset,       // Index of green byte
+	bOffset,       // Index of blue byte
+	wOffset;       // Index of white byte (same as rOffset if no white)
+	uint32_t
+	endTime;       // Latch timing reference
 };
 
 #if !defined(NO_GLOBAL_INSTANCES) && !defined(NO_GLOBAL_SERIAL)
-//extern TONY_PM TonyPM;
 extern TONY_PM TonyPM; // TonyPMx003, UART
 #endif
 
 #endif //_SERIALPM_H
+
