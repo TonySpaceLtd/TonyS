@@ -272,13 +272,14 @@ void MAX11301::defaultConfig()
 	delay(1);
 }
 
-void MAX11301::Config_deviceControl()
+bool MAX11301::Config_deviceControl()
 {
 	delay(1);
 	Command_Config();
 
 	//------ Adjust DAC Compensate Value -------//
 	uint16_t dataADC = 0;
+	writeDAC(18, 184);  // 184 = 0.449V
 	for(uint8_t i=0; i<200; i++)
 	{
 		float Voltage = 0;
@@ -294,8 +295,12 @@ void MAX11301::Config_deviceControl()
 		}
 		else if(Voltage > 0.449 && Voltage <= 0.46)
 		{
-			Serial.println("Default Config Success !");
-			break;
+			Serial.println("Default Config Successfully !");
+			//------ End Adjust Compensate Value -----//
+			Basic_Config_Port_For_GPI(18, 819);
+			Basic_Config_Port_For_GPI(19, 819);
+			delay(1);
+			return 1;
 		}
 		writeDAC(18, 184);  // 184 = 0.449V
 		
@@ -318,19 +323,19 @@ void MAX11301::Config_deviceControl()
 		{
 			DAC_Compensate = 0;
 			Serial.println("Can't calibrate compensate value !");
+			//------ End Adjust Compensate Value -----//
+			Basic_Config_Port_For_GPI(18, 819);
+			Basic_Config_Port_For_GPI(19, 819);
+			delay(1);
+			return 0;
 		}
 	}  
-	
-	//------ End Adjust Compensate Value -----//
-	Basic_Config_Port_For_GPI(18, 819);
-	Basic_Config_Port_For_GPI(19, 819);
-	delay(1);
 }
 
 void MAX11301::Advance_Config_Port(uint8_t Port, byte Mode, bool AVR_INV, byte RANGE, byte SAMPLES, byte ASSOCIATED)
 {
+	Port -= 100;
 	uint16_t regData = 0;
-	
 	Port = constrain(Port, 0, 19);
 
 	regData = Mode;
@@ -357,6 +362,7 @@ void MAX11301::Advance_Config_Port(uint8_t Port, byte Mode, bool AVR_INV, byte R
 
 void MAX11301::Basic_Config_Port(uint8_t Port, uint16_t Basic_Con)
 {
+	Port -= 100;
 	uint16_t regData = Basic_Con;
 	uint16_t Data_1 = regData >> 8;
     uint8_t Data_2 = regData;
@@ -380,6 +386,7 @@ void MAX11301::Basic_Config_Port(uint8_t Port, uint16_t Basic_Con)
 
 void MAX11301::Basic_Config_Port_For_DACADC(uint8_t Port, int16_t Output)
 {
+	Port -= 100;
 	Port = constrain(Port, 0, 19);
 
 	Output = Output+DAC_Compensate;
@@ -421,6 +428,7 @@ void MAX11301::Basic_Config_Port_For_DACADC(uint8_t Port, int16_t Output)
 
 void MAX11301::Basic_Config_Port_For_GPI(uint8_t Port, uint16_t Threshold)
 {
+	Port -= 100;
 	Port = constrain(Port, 0, 19);
 	Threshold = constrain(Threshold, 0, 4095);
 
@@ -461,6 +469,7 @@ void MAX11301::Basic_Config_Port_For_GPI(uint8_t Port, uint16_t Threshold)
 
 void MAX11301::Basic_Config_Port_For_GPO(uint8_t Port, int16_t Output)
 {
+	Port -= 100;
 	Port = constrain(Port, 0, 19);
 
 	Output = Output+DAC_Compensate;
@@ -503,7 +512,7 @@ void MAX11301::Basic_Config_Port_For_GPO(uint8_t Port, int16_t Output)
 
 uint16_t MAX11301::readADC(uint8_t Port)
 {
-
+	Port -= 100;
 	Port = constrain(Port, 0, 19);
 	
 	uint8_t getData[2];
@@ -538,6 +547,7 @@ uint16_t MAX11301::readADC(uint8_t Port)
 
 void MAX11301::writeDAC(uint8_t Port, int16_t Output)
 {
+	Port -= 100;
 	int16_t Value = Output+DAC_Compensate;
 	Value = constrain(Value, 0, 4095);
     uint16_t Data_1 = Value >> 8;
@@ -554,6 +564,7 @@ void MAX11301::writeDAC(uint8_t Port, int16_t Output)
 
 void MAX11301::writeGPO(uint8_t Port, bool Output)
 {
+	Port -= 100;
 	byte addrPort = 0;
 	uint8_t getData[2];
 	uint16_t readGPO = 0;
@@ -622,33 +633,47 @@ void MAX11301::writeGPO(uint8_t Port, bool Output)
     Wire.endTransmission();
 }
 
-void MAX11301::write_speedGPO(uint8_t Port, uint16_t Value)
-{
+void MAX11301::write_speedGPO(uint8_t Port, bool Value)
+{	
+	Port -= 100;
 	byte addrPort = 0;
-    uint16_t Data_1 = Value >> 8;
-    uint8_t Data_2 = Value;
+	if(Value==1)
+	{
+		output_buf |= 1 << Port; 
+	}
+	else 
+	{
+		output_buf &= ~(1 << Port); 
+	}
 	
+	uint8_t Data_1 = 0;
+	uint8_t Data_2 = 0;
 	Port = constrain(Port, 0, 19);
 
-    if(Port <= 15)
+	if(Port <= 15)
 	{
+		Data_1 = (output_buf>>8);
+		Data_2 = output_buf;
 		addrPort = GPO_port_0_to_15;
 	}
 	else
 	{
+		Data_1 = 0;
+		Data_2 = (output_buf >> 16)&0x0F;
 		addrPort = GPO_port_16_to_19;
 	}
 	
-    Wire.beginTransmission(ADDRMAX11301);
-    Wire.write(addrPort);
-    Wire.write(Data_1);
-    Wire.write(Data_2);
-    Wire.endTransmission();
+	Wire.beginTransmission(ADDRMAX11301);
+	Wire.write(addrPort);
+	Wire.write(Data_1);
+	Wire.write(Data_2);
+	Wire.endTransmission();
 }
 
 
 bool MAX11301::readGPI(uint8_t Port)
 {
+	Port -= 100;
 	byte addrPort = 0;
 	uint8_t getData[2];
 	uint16_t dataGPI = 0;
@@ -694,6 +719,7 @@ bool MAX11301::readGPI(uint8_t Port)
 
 bool MAX11301::readGPO(uint8_t Port)
 {
+	Port -= 100;
 	byte addrPort = 0;
 	uint8_t getData[2];
 	uint16_t dataGPO = 0;

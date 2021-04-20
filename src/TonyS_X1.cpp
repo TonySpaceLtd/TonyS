@@ -1,7 +1,9 @@
-// V.TS002
+// V.TS003
 #include "TonyS_X1.h"
 
+#if !defined(NO_GLOBAL_INSTANCES) && !defined(NO_GLOBAL_SERIAL)
 TonyS_X1 Tony;
+#endif
 
 TonyS_X1::TonyS_X1()
 {
@@ -20,11 +22,13 @@ uint16_t chkSum1 = 0;
 uint8_t chkSum2 = 0;
 bool check = 0;
 
-void TonyS_X1::begin() 
+bool TonyS_X1::begin() 
 {
+	bool check_results = 0;
 	preparePower();
 	delay(100);
 	Wire.begin();
+	delay(2);
 	checkIC();
 	IO.Real_pinMode(LED_BUILTIN, OUTPUT); // ------- Set to OUTPUT
 	IO.Real_digitalWrite(LED_BUILTIN, LOW);  //---- OFF LED_BUILTIN
@@ -33,23 +37,24 @@ void TonyS_X1::begin()
 	{
 		if (board_model == PRO_MODEL) 
 		{
-			MAX11301.Config_deviceControl(); 			
+			check_results = MAX11301.Config_deviceControl(); 			
 			// Set MAX11301 to default pin mode 
 			for(uint8_t i=0; i<20; i++)
 			{
 				pinStatus[i] = modeGPI;
 			}
 		}
-		pinMode(IO15, OUTPUT); //----  Set Pin IO14 (Relay 1) to OUTPUT
-		pinMode(IO16, OUTPUT); //----  Set Pin IO15 (Relay 2) to OUTPUT
-		digitalWrite(IO15, LOW); //---- Write LOW to pin IO14 (Relay 1)
-		digitalWrite(IO16, LOW); //---- Write LOW to pin IO15 (Relay 2)
+		Tony.pinMode(IO15, OUTPUT); //----  Set Pin IO14 (Relay 1) to OUTPUT
+		Tony.pinMode(IO16, OUTPUT); //----  Set Pin IO15 (Relay 2) to OUTPUT
+		Tony.digitalWrite(IO15, LOW); //---- Write LOW to pin IO14 (Relay 1)
+		Tony.digitalWrite(IO16, LOW); //---- Write LOW to pin IO15 (Relay 2)
 	}
+	return check_results;
 }
 
 void TonyS_X1::pinMode(uint8_t pin, uint8_t type)
 {
-	if(pin <= 19)   
+	if(pin >= 100)   
 	{	
 		if (board_model == PRO_MODEL) 
 		{
@@ -110,17 +115,17 @@ void TonyS_X1::pinMode(uint8_t pin, uint8_t type)
 
 void TonyS_X1::digitalWrite(uint8_t pin, bool value)
 {
-	if(pin <= 19)
+	if(pin >= 100)
 	{
 		if (board_model == PRO_MODEL) 
 		{
-			if(value == 0)
+			if(value == 1)
 			{
-				MAX11301.writeGPO(pin, 0);
+				MAX11301.write_speedGPO(pin, 1); 
 			}
-			else if(value == 1)
+			else
 			{
-				MAX11301.writeGPO(pin, 1); //Logic's ouput 1 = HIGH 
+				MAX11301.write_speedGPO(pin, 0); 
 			}
 		}
 		else if (board_model == BASIC_MODEL) 
@@ -137,10 +142,32 @@ void TonyS_X1::digitalWrite(uint8_t pin, bool value)
 	}
 }
 
+void TonyS_X1::digitalnormalWrite(uint8_t pin, bool value)
+{
+	if(pin >= 100)
+	{
+		if (board_model == PRO_MODEL) 
+		{
+			if(value == 1)
+			{
+				MAX11301.writeGPO(pin, 1);  
+			}
+			else
+			{
+				MAX11301.writeGPO(pin, 0); 
+			}
+		}	
+	}
+	else
+	{
+		IO.Real_digitalWrite(pin, value);
+	}
+}
+
 bool TonyS_X1::digitalRead(uint8_t pin)
 {
 	bool value = 0;
-	if(pin <= 19)
+	if(pin >= 100)
 	{
 		if (board_model == PRO_MODEL) 
 		{
@@ -163,7 +190,7 @@ bool TonyS_X1::digitalRead(uint8_t pin)
 uint16_t TonyS_X1::analogRead(uint8_t pin)
 {
 	uint16_t dataADC = 0;
-	if(pin <= 19)
+	if(pin >= 100)
 	{
 		if (board_model == PRO_MODEL) 
 		{

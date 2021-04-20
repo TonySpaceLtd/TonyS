@@ -1,12 +1,14 @@
 #ifndef TonyS_X1_ExternalModule_h
 #define TonyS_X1_ExternalModule_h
 
+#include "Module/LoRaWAN/TonySpace_LoRaWAN.h"
+#include "Module/7Segment/TonySpace_7Segment.h"
 #include "Module/PMSA003/TonySpace_PM.h"
 #include "Module/Tact_Switch/TonySpace_TactSwitch.h"
 #include "Module/FRAM/TonySpace_FRAM.h"
 #include "Module/GPS/TonySpace_L86.h"
 #include "Module/Accelerometer/TonySpace_ADXL345.h"
-#include "Module/4_20mA/TonySpace_4_20mA.h"
+#include "Module/4_20mA_input/TonySpace_4_20mA_input.h"
 #include "Module/RS485/TonySpace_RS485.h"
 #include "Module/Adafruit_SHT31_Library/Adafruit_SHT31.h";
 #include "Module/Display/Adafruit_GFX_Library/Adafruit_GFX.h"    // Core graphics library

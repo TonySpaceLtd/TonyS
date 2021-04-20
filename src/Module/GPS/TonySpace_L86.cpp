@@ -67,75 +67,57 @@ void TONY_GPS::slot(uint8_t slot)
 	switch(slot)
 	{
 		case  SLOT1 :
-			pin_force_on = IO0;
-			pin_RX = RX1;
-			pin_TX = TX1;
+			pin_force_on = AIO0;
+			pin_RX = IO0;
+			pin_TX = -1;
 			_uart_nr = 1;
 			break;
 		case  SLOT2 :
-			pin_force_on = IO2;
-			pin_RX = RX1;
-			pin_TX = TX1;
+			pin_force_on = AIO2;
+			pin_RX = IO2;
+			pin_TX = -1;
 			_uart_nr = 1;
 			break;
 		case  SLOT3 :
-			pin_force_on = IO4;
-			pin_RX = RX1;
-			pin_TX = TX1;
-			_uart_nr = 1;
+			Serial.println("Please use GPS Module only SLOT1 , SLOT2 , SLOT6");
 			break;
 		case  SLOT4 :
-			pin_force_on = IO6;
-			pin_RX = RX2;
-			pin_TX = TX2;
-			_uart_nr = 2;
+			Serial.println("Please use GPS Module only SLOT1 , SLOT2 , SLOT6");
 			break;
 		case  SLOT5 :
-			pin_force_on = IO8;
-			pin_RX = RX2;
-			pin_TX = TX2;
-			_uart_nr = 2;
+			Serial.println("Please use GPS Module only SLOT1 , SLOT2 , SLOT6");
 			break;
 		case  SLOT6 :
-			pin_force_on = IO10;
-			pin_RX = RX2;
-			pin_TX = TX2;
+			pin_force_on = AIO10;
+			pin_RX = IO10;
+			pin_TX = -1;
 			_uart_nr = 2;
 			break;
 		case  SLOT1_U :
-			pin_force_on = IO1;
-			pin_RX = RX1;
-			pin_TX = TX1;
+			pin_force_on = AIO1;
+			pin_RX = IO1;
+			pin_TX = -1;
 			_uart_nr = 1;
 			break;
 		case  SLOT2_U :
-			pin_force_on = IO3;
-			pin_RX = RX1;
-			pin_TX = TX1;
+			pin_force_on = AIO3;
+			pin_RX = IO3;
+			pin_TX = -1;
 			_uart_nr = 1;
 			break;
 		case  SLOT3_U :
-			pin_force_on = IO5;
-			pin_RX = RX1;
-			pin_TX = TX1;
-			_uart_nr = 1;
+			Serial.println("Please use GPS Module only SLOT1 , SLOT2 , SLOT6");
 			break;
 		case  SLOT4_U :
-			pin_force_on = IO7;
-			pin_RX = RX2;
-			pin_TX = TX2;
-			_uart_nr = 2;
+			Serial.println("Please use GPS Module only SLOT1 , SLOT2 , SLOT6");
 			break;
 		case  SLOT5_U :
-			pin_force_on = IO9;
-			pin_RX = RX2;
-			pin_TX = TX2;
-			_uart_nr = 2;
+			Serial.println("Please use GPS Module only SLOT1 , SLOT2 , SLOT6");
 			break;
 		case  SLOT6_U :
-			pin_force_on = IO11;
-			pin_RX = RX2;
-			pin_TX = TX2;
+			pin_force_on = AIO11;
+			pin_RX = IO11;
+			pin_TX = -1;
 			_uart_nr = 2;
 			break;
 	}	

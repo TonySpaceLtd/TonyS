@@ -1,4 +1,4 @@
-// V.TS001
+// V.TS003
 #ifndef TonyS_X1_h
 #define TonyS_X1_h
 
@@ -40,9 +40,10 @@ class TonyS_X1
 {
 public:
 	TonyS_X1();
-	void begin();
+	bool begin();
 	void pinMode(uint8_t pin, uint8_t type);
 	void digitalWrite(uint8_t pin, bool value);
+	void digitalnormalWrite(uint8_t pin, bool value);
 	bool digitalRead(uint8_t pin);
 	uint16_t analogRead(uint8_t pin);
 	void analogWrite(uint8_t pin, uint16_t Output); // Output 0-10V
@@ -68,14 +69,12 @@ public:
 	HardwareSerial SerialBegin(uint8_t slot,unsigned long baud,uint32_t config=SERIAL_8N1, int8_t rxPin=-1, int8_t txPin=-1, bool invert=false, unsigned long timeout_ms = 20000UL); //Serial
 	
 private:
-		
 	
 };
+
+#if !defined(NO_GLOBAL_INSTANCES) && !defined(NO_GLOBAL_SERIAL)
 extern TonyS_X1 Tony;
-
-
-
-
+#endif
 #endif
 
 

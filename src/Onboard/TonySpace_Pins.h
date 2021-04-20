@@ -1,46 +1,47 @@
+// V.TS003
 #ifndef TonySpace_Pins_h
 #define TonySpace_Pins_h
 
 // Mapping of analog pins (AIO)
-static const uint8_t AIO0 = 7;
-static const uint8_t AIO1 = 6;
-static const uint8_t AIO2 = 9;
-static const uint8_t AIO3 = 8;
-static const uint8_t AIO4 = 11; 
-static const uint8_t AIO5 = 10;
-static const uint8_t AIO6 = 1;	
-static const uint8_t AIO7 = 0;	
-static const uint8_t AIO8 = 2;	
-static const uint8_t AIO9 = 3;	
-static const uint8_t AIO10 = 4;	
-static const uint8_t AIO11 = 5;	
+static const uint8_t AIO0 = 107; //7
+static const uint8_t AIO1 = 106; //6
+static const uint8_t AIO2 = 109; //9
+static const uint8_t AIO3 = 108; //8
+static const uint8_t AIO4 = 111; //11
+static const uint8_t AIO5 = 110; //10
+static const uint8_t AIO6 = 101; //1
+static const uint8_t AIO7 = 100; //0	
+static const uint8_t AIO8 = 102; //2	
+static const uint8_t AIO9 = 103; //3	
+static const uint8_t AIO10 = 104; //4	
+static const uint8_t AIO11 = 105; //5	
 
 
 
 // Mapping of digital pins (IO)
-static const uint8_t IO0 = 125;  //Real = 25
-static const uint8_t IO1 = 126;  //Real = 26
-static const uint8_t IO2 = 127;  //Real = 27
-static const uint8_t IO3 = 114;  //Real = 14
-static const uint8_t IO4 = 17;   
-static const uint8_t IO5 = 16;   
-static const uint8_t IO6 = 12;	
-static const uint8_t IO7 = 13;	
-static const uint8_t IO8 = 14;	
-static const uint8_t IO9 = 15;	
-static const uint8_t IO10 = 104;  //Real = 4
-static const uint8_t IO11 = 113;  //Real = 13
+static const uint8_t IO0 = 25;  //Real = 25
+static const uint8_t IO1 = 26;  //Real = 26
+static const uint8_t IO2 = 27;  //Real = 27
+static const uint8_t IO3 = 14;  //Real = 14
+static const uint8_t IO4 = 117; //17  
+static const uint8_t IO5 = 116; //16  
+static const uint8_t IO6 = 112; //12	
+static const uint8_t IO7 = 113; //13	
+static const uint8_t IO8 = 114; //14	
+static const uint8_t IO9 = 115; //15	
+static const uint8_t IO10 = 4;  //Real = 4
+static const uint8_t IO11 = 13;  //Real = 13
 
-static const uint8_t IO_CS = 105; //Real = 5
-static const uint8_t IO_MOSI = 123;  //Real = 23
-static const uint8_t IO_MISO = 119;  //Real = 19
-static const uint8_t IO_CLK = 118;  //Real = 18
+static const uint8_t IO_CS = 5; //Real = 5
+static const uint8_t IO_MOSI = 23;  //Real = 23
+static const uint8_t IO_MISO = 19;  //Real = 19
+static const uint8_t IO_CLK = 18;  //Real = 18
 
-static const uint8_t IO12 = 115;// LED_BUILTIN
-static const uint8_t IO13 = 102; // ON-OFF Board's Power
-static const uint8_t IO14 = 112; // ON-OFF MAX11301's Power
-static const uint8_t IO15 = 18; // ON-OFF Relay 1
-static const uint8_t IO16 = 19; // ON-OFF Relay 2
+static const uint8_t IO12 = 15;// LED_BUILTIN
+static const uint8_t IO13 = 2; // ON-OFF Board's Power
+static const uint8_t IO14 = 12; // ON-OFF MAX11301's Power
+static const uint8_t IO15 = 118; // ON-OFF Relay 1
+static const uint8_t IO16 = 119; // ON-OFF Relay 2
 
 #define  RX0  		    3   
 #define  TX0  		    1   
@@ -58,18 +59,18 @@ static const uint8_t IO16 = 19; // ON-OFF Relay 2
 static const uint8_t Relay_1 = IO15; // ON-OFF Relay 1
 static const uint8_t Relay_2 = IO16; // ON-OFF Relay 2
 
-#define  SLOT1    		0
-#define  SLOT1_U    	1
-#define  SLOT2    		2
-#define  SLOT2_U    	3
-#define  SLOT3    		4
-#define  SLOT3_U    	5
-#define  SLOT4    		6
-#define  SLOT4_U    	7
-#define  SLOT5    		8
-#define  SLOT5_U    	9
-#define  SLOT6    		10
-#define  SLOT6_U    	11
+#define  SLOT1    		1
+#define  SLOT1_U    	2
+#define  SLOT2    		3
+#define  SLOT2_U    	4
+#define  SLOT3    		5
+#define  SLOT3_U    	6
+#define  SLOT4    		7
+#define  SLOT4_U    	8
+#define  SLOT5    		9
+#define  SLOT5_U    	10
+#define  SLOT6    		11
+#define  SLOT6_U    	12
 
 static const uint8_t getPinIO[12]={IO0,IO1,IO2,IO3,IO4,IO5,IO6,IO7,IO8,IO9,IO10,IO11};
 

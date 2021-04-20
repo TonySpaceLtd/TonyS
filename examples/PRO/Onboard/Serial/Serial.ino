@@ -2,13 +2,12 @@
 HardwareSerial HWSerial(NULL);
 void setup() {
   Serial.begin(115200);
-  Serial.println("Hello World");
   Tony.begin();
   HWSerial = Tony.SerialBegin(SLOT2,9600);
 }
 void loop() {
- if(HWSerial.available())
+  if(HWSerial.available())
     Serial.write(HWSerial.read());
-if(Serial.available())
+  if(Serial.available())
     HWSerial.write(Serial.read());
 }

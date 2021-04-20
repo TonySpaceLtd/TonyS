@@ -1,5 +1,5 @@
 // V.TS001
-#include "TonySpace_4_20mA.h"
+#include "TonySpace_4_20mA_input.h"
 #include "TonyS_X1.h"
 
 TonyS_X1 Tony_4_20;

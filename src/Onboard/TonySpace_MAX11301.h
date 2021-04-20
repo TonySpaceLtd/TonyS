@@ -214,7 +214,7 @@ class MAX11301
 public:
 	MAX11301();
 	void Command_Config();
-	void Config_deviceControl();
+	bool Config_deviceControl();
 	void Advance_Config_Port(uint8_t Port, byte Mode, bool AVR_INV, byte RANGE, byte SAMPLES, byte ASSOCIATED);
 	void Basic_Config_Port(uint8_t Port, uint16_t Basic_Con);
 	void Basic_Config_Port_For_DACADC(uint8_t Port, int16_t Output); // DAC with ADC monitoring
@@ -223,13 +223,13 @@ public:
     uint16_t readADC(uint8_t Port);
 	void writeDAC(uint8_t Port, int16_t Output);
 	void writeGPO(uint8_t Port, bool Output);
-	void write_speedGPO(uint8_t Port, uint16_t Value);
+	void write_speedGPO(uint8_t Port, bool Value);
 	bool readGPI(uint8_t Port);
 	bool readGPO(uint8_t Port);
 	void defaultConfig();
 
 private:
-	
+	uint32_t output_buf;
 };
 
 

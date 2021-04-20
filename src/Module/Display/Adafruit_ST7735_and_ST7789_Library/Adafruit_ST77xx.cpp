@@ -29,8 +29,9 @@
   #include "wiring_private.h"
 #endif
 #include <SPI.h>
-
-#define SPI_DEFAULT_FREQ 40000000 ///< Default SPI data clock frequency
+					   //26600000
+#define SPI_DEFAULT_FREQ 40000000 ///< Default SPI data clock frequency 
+								  // 80, 40, 26.6, 20, 16, 13.3, 11.4, 10 MHz
 
 /**************************************************************************/
 /*!

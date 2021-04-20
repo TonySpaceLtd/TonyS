@@ -5,7 +5,7 @@
 float t;
 float h;
 
-Adafruit_ST7789 tft = Adafruit_ST7789(SLOT1,TFT_240_320);
+Adafruit_ST7789 tft = Adafruit_ST7789(SLOT4,TFT_240_320);
 unsigned long previousMillis = 0; 
 const long interval = 1; //Interval for update the display
 
