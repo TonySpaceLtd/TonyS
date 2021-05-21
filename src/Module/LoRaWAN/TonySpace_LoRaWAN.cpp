@@ -3,9 +3,9 @@
 
 #if !defined(NO_GLOBAL_INSTANCES) && !defined(NO_GLOBAL_SERIAL)
 TONY_LORA TonyLORA;
+extern HardwareSerial LoRaSerial(NULL);
 #endif
 
-HardwareSerial LoRaSerial(NULL);
 
 TONY_LORA::TONY_LORA()
 {

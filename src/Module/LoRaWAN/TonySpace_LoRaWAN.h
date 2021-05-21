@@ -34,6 +34,7 @@ class TONY_LORA
 
 #if !defined(NO_GLOBAL_INSTANCES) && !defined(NO_GLOBAL_SERIAL)
 extern TONY_LORA TonyLORA;
+extern HardwareSerial LoRaSerial;
 #endif
 #endif
 
