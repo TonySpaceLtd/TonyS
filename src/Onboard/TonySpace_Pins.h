@@ -37,6 +37,9 @@ static const uint8_t IO_MOSI = 23;  //Real = 23
 static const uint8_t IO_MISO = 19;  //Real = 19
 static const uint8_t IO_CLK = 18;  //Real = 18
 
+static const uint8_t IO_SDA = 21;  //Real = 21
+static const uint8_t IO_SCL = 22;  //Real = 22
+
 static const uint8_t IO12 = 15;// LED_BUILTIN
 static const uint8_t IO13 = 2; // ON-OFF Board's Power
 static const uint8_t IO14 = 12; // ON-OFF MAX11301's Power
