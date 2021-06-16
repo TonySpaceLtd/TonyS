@@ -158,7 +158,7 @@ void Tony_RS485::end()
     if(uartGetDebug() == _uart_nr) {
         uartSetDebug(0);
     }
-    uartEnd(_uart);
+    uartEnd(_uart, pin_RX, pin_TX);
     _uart = 0;
 }
 

@@ -85,9 +85,11 @@
 
 //------------------------------------- Basic Config Port (Start) -------------------------//  
 
-#define  ADCtype1		    0x71e0  // Rang 0-10V , Samples 128 , Internal Referent
-#define  ADCtype2		    0x74e0  // Rang 0-2.5V , Samples 128 , Internal Referent
-#define  DACtype		    0x5100  // Rang 0-10V , Internal Referent
+#define  ADCtype1		    0x71e0  // Rang ADC 0-10V , DAC 0-10V , Samples 128 , Internal Referent
+#define  ADCtype2		    0x76e0  // Rang ADC 0-2.5V , DAC 0-10V , Samples 128 , Internal Referent
+#define  DACtype		    0x5100  // Rang DAC 0-10V , Internal Referent
+#define  ADC10V  			ADCtype1
+#define  ADC2V5			    ADCtype2
 
 //------ For GPO -----
 #define  GPOtype		    0x3000  // Config_Port_xx

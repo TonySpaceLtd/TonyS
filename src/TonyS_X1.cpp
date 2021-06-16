@@ -52,7 +52,7 @@ bool TonyS_X1::begin()
 	return check_results;
 }
 
-void TonyS_X1::pinMode(uint8_t pin, uint8_t type)
+void TonyS_X1::pinMode(uint8_t pin, uint16_t type)
 {
 	if(pin >= 100)   
 	{	
@@ -60,21 +60,41 @@ void TonyS_X1::pinMode(uint8_t pin, uint8_t type)
 		{
 			if(ismax_rdy())
 			{
-				if(type == INPUT)
+				switch(type)
 				{
-					MAX11301.Basic_Config_Port_For_GPI(pin, 0xfff); //Threshold ‭‭4095 ‬= 2.5V  , 0xfff = 2.5V(MAX)
-					pinStatus[pin] = modeGPI;
-				}
-				else if(type == OUTPUT)
-				{
-					MAX11301.Basic_Config_Port_For_GPO(pin, 1352); //Logic's ouput 1352 = 3.3V  
-					pinStatus[pin] = modeGPO;
-				}
-				else if(type == INPUT_PULLUP)
-				{
-					Serial.println();
-					Serial.println("This pin not support INPUT_PULLUP mode.");
-					Serial.println("Please select only pin IO0, IO1, IO2, IO3, IO10 and IO11.");
+/* 					case INPUT:
+					{
+						MAX11301.Basic_Config_Port_For_GPI(pin, 0xfff); //Threshold ‭‭4095 ‬= 2.5V  , 0xfff = 2.5V(MAX)
+						pinStatus[pin] = modeGPI;
+						break;
+					} */
+					case OUTPUT: 					
+					{
+						MAX11301.Basic_Config_Port_For_GPO(pin, 1352); //Logic's ouput 1352 = 3.3V  
+						pinStatus[pin] = modeGPO;
+						break;
+					}
+					case INPUT_PULLUP:
+					{
+						Serial.println();
+						Serial.println("This pin not support INPUT_PULLUP mode.");
+						Serial.println("Please select only pin IO0, IO1, IO2, IO3, IO10 and IO11.");
+						break;
+					}
+					case ADC2V5:
+					{
+						MAX11301.Basic_Config_Port(pin, ADCtype2);  // Config Port (pin) to ADC 0-10V	 
+						pinStatus[pin] = modeADC;
+						break;
+					}
+					case ADC10V:
+					{
+						MAX11301.Basic_Config_Port(pin, ADCtype1);  // Config Port (pin) to ADC 0-10V
+						pinStatus[pin] = modeADC;
+						break;
+					}
+					default:
+					break;
 				}
 			}
 			else

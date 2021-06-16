@@ -41,7 +41,7 @@ class TonyS_X1
 public:
 	TonyS_X1();
 	bool begin();
-	void pinMode(uint8_t pin, uint8_t type);
+	void pinMode(uint8_t pin, uint16_t type);
 	void digitalWrite(uint8_t pin, bool value);
 	void digitalnormalWrite(uint8_t pin, bool value);
 	bool digitalRead(uint8_t pin);
