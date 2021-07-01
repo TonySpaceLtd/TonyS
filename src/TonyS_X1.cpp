@@ -62,12 +62,12 @@ void TonyS_X1::pinMode(uint8_t pin, uint16_t type)
 			{
 				switch(type)
 				{
-/* 					case INPUT:
+					case INPUT:
 					{
 						MAX11301.Basic_Config_Port_For_GPI(pin, 0xfff); //Threshold ‭‭4095 ‬= 2.5V  , 0xfff = 2.5V(MAX)
 						pinStatus[pin] = modeGPI;
 						break;
-					} */
+					}
 					case OUTPUT: 					
 					{
 						MAX11301.Basic_Config_Port_For_GPO(pin, 1352); //Logic's ouput 1352 = 3.3V  
