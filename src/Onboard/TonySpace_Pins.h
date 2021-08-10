@@ -75,6 +75,6 @@ static const uint8_t Relay_2 = IO16; // ON-OFF Relay 2
 #define  SLOT6    		11
 #define  SLOT6_U    	12
 
-static const uint8_t getPinIO[12]={IO0,IO1,IO2,IO3,IO4,IO5,IO6,IO7,IO8,IO9,IO10,IO11};
+static const uint8_t getPinIO[13] = {0,IO0,IO1,IO2,IO3,IO4,IO5,IO6,IO7,IO8,IO9,IO10,IO11};
 
 #endif /* TonySpace_Pins_h */
