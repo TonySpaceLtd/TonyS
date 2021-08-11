@@ -197,11 +197,11 @@ void EC25_MQTT::task()
 	
 	str = "+QMTRECV: "+String(_client_idx)+",0,0,0,0,0";
 	String str2[3]={"OK",str,"ERROR"};
-	res = LTE.ECser.waitString(str,3);
+	res = LTE.ECser.waitString(str2,3);
 	if(res.id==0)
 	{
-		_connected=0;
-		return;
+		//_connected=0;
+		//return;
 	}
 	if(res.id==1)
 	{
@@ -266,7 +266,31 @@ void EC25_MQTT::task()
 }
 uint8_t EC25_MQTT::connected()
 {
-	return _connected;
+	for(uint8_t i=0;i<3;i++)
+	{
+		LTE.ECser.flush();
+		LTE.ECser.sendAT(F("AT+QMTCONN?\r"));
+		EC_Resp res;
+		String str2[3]={"OK","+QMTCONN:","ERROR"};
+		res = LTE.ECser.waitString(str2,3,1000);
+		if(res.id==1)
+		{
+			int index1 = res.data.indexOf(":");
+			int index2 = res.data.indexOf(",");
+			int id = res.data.substring(index1+1,index2).toInt();
+			int state = res.data.substring(index2+1).toInt();
+			if(id == _client_idx)
+			{
+				if(state == 4)
+					return false;
+				else
+					return true;
+					
+			}
+		}
+	}
+	
+	return false;
 }
 bool EC25_MQTT::publish(String topic,uint8_t *payload,size_t msglen,uint8_t msgID,uint8_t qos,uint8_t retain)
 {
