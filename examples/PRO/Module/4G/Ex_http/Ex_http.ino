@@ -41,7 +41,7 @@ void loop()
 void httpget()
 {
   Serial.print("Set URL :");
-  int ret = http.setURL("http://covid19.th-stat.com/api/open/today"); //URL must begin with “http://"
+  int ret = http.setURL("http://covid19.ddc.moph.go.th/api/Cases/today-cases-all"); //URL must begin with “http://"
   if(ret)
   {
     Serial.println("OK");
