@@ -1,0 +1,41 @@
+#include "TonyS_X1.h"
+
+
+/*
+ ______________________________________
+| SLOT | Pin 1st floor | Pin 2st floor |
+ --------------------------------------
+|  1   |      AIO0     |      AIO1     |
+|  2   |      AIO2     |      AIO3     |
+|  3   |      AIO4     |      AIO5     |
+|  4   |      AIO6     |      AIO7     |
+|  5   |      AIO8     |      AIO9     |
+|  6   |      AIO10    |      AIO11    |
+ --------------------------------------
+ */
+
+
+void setup() 
+{
+  Serial.begin(115200);
+  Serial.println("TonyS_X1 Example");
+  Tony.begin();  //----  begin Library
+  Serial.println();
+  Serial.println("Testing Thermistor Module");
+  delay(10);
+}
+
+void loop() 
+{
+  uint16_t dataADC = 0;
+  float Voltage = 0;
+  dataADC = Tony.analogRead(AIO0);     // Reading from slot 1 on 1st floor = AIO0
+  Voltage = float(10.0/4095)*dataADC;  // Calculate analog to voltage
+  Serial.print("Voltage = ");
+  Serial.print(Voltage,3);  
+  Serial.println(" V");  
+  Serial.println();  
+//  Serial.print("AIO0 Digital Value = ");
+//  Serial.println(dataADC);  
+  delay(1000); 
+}
