@@ -137,4 +137,8 @@ class Adafruit_SHT31 {
         boolean  readData(void);
 };
 
+
+
+
+
 #endif

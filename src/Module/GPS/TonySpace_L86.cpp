@@ -139,8 +139,8 @@ void TONY_GPS::begin(unsigned long baud)
     }
 
     if(_uart_nr == 0 && rxPin < 0 && txPin < 0) {
-        rxPin = NULL;
-        txPin = NULL;
+       // rxPin = NULL;
+       // txPin = NULL;
     }
     if(_uart_nr == 1 && rxPin < 0 && txPin < 0) {
         rxPin = RX1;
@@ -151,7 +151,7 @@ void TONY_GPS::begin(unsigned long baud)
         txPin = TX2;
     }
 
-    _uart = uartBegin(_uart_nr, baud ? baud : 9600, config, rxPin, txPin, 256, invert);
+    _uart = uartBegin(_uart_nr, baud ? baud : 9600, config, rxPin, txPin, 256, invert,112);
 
     if(!baud) {
         time_t startMillis = millis();
@@ -162,12 +162,13 @@ void TONY_GPS::begin(unsigned long baud)
 
         if(detectedBaudRate) {
             delay(100); // Give some time...
-            _uart = uartBegin(_uart_nr, detectedBaudRate, config, rxPin, txPin, 256, invert);
+            _uart = uartBegin(_uart_nr, detectedBaudRate, config, rxPin, txPin, 256, invert,112);
         } else {
             log_e("Could not detect baudrate. Serial data at the port must be present within the timeout for detection to be possible");
             _uart = NULL;
         }
     }
+	
 }
 
 void TONY_GPS::GPS_ForceOn(bool force_on)
@@ -186,12 +187,16 @@ void TONY_GPS::end()
     if(uartGetDebug() == _uart_nr) {
         uartSetDebug(0);
     }
-    uartEnd(_uart, pin_RX, pin_TX);
+	delay(10);
+    //uartEnd(_uart, pin_RX, pin_TX);
+	uartEnd(_uart);
     _uart = 0;
+	
 }
 
 size_t TONY_GPS::setRxBufferSize(size_t new_size) {
-    return uartResizeRxBuffer(_uart, new_size);
+   // return uartResizeRxBuffer(_uart, new_size);
+   return 0;
 }
 
 void TONY_GPS::setDebugOutput(bool en)

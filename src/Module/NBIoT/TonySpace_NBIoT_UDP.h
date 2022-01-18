@@ -19,7 +19,7 @@ class NBIoT_UDP : public Stream
 			serverIP_="";
 			port_ = 0;
 		};
-	uint8_t createSocket(String serverIP,int port,bool receiveCtrl = false,bool ipv6= false);
+	int createSocket(String serverIP,int port,bool receiveCtrl = false,bool ipv6= false);
 	void setServer(String serverIP,int port);
 	bool write(uint8_t *data,size_t length);
 	bool print(String data);
@@ -33,9 +33,9 @@ class NBIoT_UDP : public Stream
 	
 	//Stream Class 
 		virtual int read(){return udpRead();};	
-		virtual size_t write(uint8_t c){};
+		virtual size_t write(uint8_t c){return 0;};
 		virtual int available(){return udpAvailable();};
-		virtual int peek(){}; 
+		virtual int peek(){return 0;}; 
 		virtual void flush(){};
 		using Stream::write; // make the other overloads of write visible
 

@@ -1,7 +1,7 @@
 #include "TonySpace_NBIoT_TCP.h"
 #include "TonyS_X1.h"
 
-uint8_t NBIoT_TCP::createSocket(int port,bool receiveCtrl,bool ipv6)
+int NBIoT_TCP::createSocket(int port,bool receiveCtrl,bool ipv6)
 {
 	ser_nbiot.flush();
 	ser_nbiot.flush();

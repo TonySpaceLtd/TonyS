@@ -244,5 +244,6 @@ bool TONY_FRAM::clear()
 	
 	Serial.println("|100 % Complete !");
 	Serial.println("\r\n");
+	return true;
 	// -------------------------------------------------------------//
 }

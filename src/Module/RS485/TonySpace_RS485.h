@@ -68,8 +68,9 @@ protected:
 	
     uart_t* _uart;
 	
-	byte _len,
-		_data[];
+	byte _len;
+	byte _data[256];
+		//_data[];
 
 	word _baud,
 		 _crc,

@@ -138,18 +138,19 @@ String EC25::getAccessTech()
 }
 int EC25::getSignaldBm()
 {
+	int ret=0;
 	int sig = getSignal();
 	if(sig>=99)
-		return(0);
+		ret=0;
 	if(sig==0)
-		return -113;
+		ret= -113;
 	if(sig==1)
-		return -111;
+		ret= -111;
 	if((sig>=2)&&(sig<=30))
-		return map(sig,2,30,-109,-53);
+		ret = map(sig,2,30,-109,-53);
 	if(sig==31)
-		return -51;
-	
+		ret = -51;
+	return ret;
 	
 }
 int EC25::getSignal()

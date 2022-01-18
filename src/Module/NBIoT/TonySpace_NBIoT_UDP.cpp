@@ -1,6 +1,6 @@
 #include "TonySpace_NBIoT_UDP.h"
 
-uint8_t NBIoT_UDP::createSocket(String serverIP,int port,bool receiveCtrl,bool ipv6)
+int NBIoT_UDP::createSocket(String serverIP,int port,bool receiveCtrl,bool ipv6)
 {
 	ser_nbiot.flush();
 	ser_nbiot.flush();

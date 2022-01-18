@@ -127,7 +127,7 @@ void Tony_RS485::begin(unsigned long baud)
         txPin = TX2;
     }
 
-    _uart = uartBegin(_uart_nr, baud ? baud : 9600, config, rxPin, txPin, 256, invert);
+    _uart = uartBegin(_uart_nr, baud ? baud : 9600, config, rxPin, txPin, 256, invert,112);
 
     if(!baud) {
         time_t startMillis = millis();
@@ -140,12 +140,13 @@ void Tony_RS485::begin(unsigned long baud)
 
         if(detectedBaudRate) {
             delay(100); // Give some time...
-            _uart = uartBegin(_uart_nr, detectedBaudRate, config, rxPin, txPin, 256, invert);
+            _uart = uartBegin(_uart_nr, detectedBaudRate, config, rxPin, txPin, 256, invert,112);
         } else {
             log_e("Could not detect baudrate. Serial data at the port must be present within the timeout for detection to be possible");
             _uart = NULL;
         }
     }
+	
 }
 
 void Tony_RS485::updateBaudRate(unsigned long baud)
@@ -158,12 +159,16 @@ void Tony_RS485::end()
     if(uartGetDebug() == _uart_nr) {
         uartSetDebug(0);
     }
-    uartEnd(_uart, pin_RX, pin_TX);
+   delay(10);
+    //uartEnd(_uart, pin_RX, pin_TX);
+	uartEnd(_uart);
     _uart = 0;
+	
 }
 
 size_t Tony_RS485::setRxBufferSize(size_t new_size) {
-    return uartResizeRxBuffer(_uart, new_size);
+   // return uartResizeRxBuffer(_uart, new_size
+   return 0;
 }
 
 void Tony_RS485::setDebugOutput(bool en)
@@ -260,7 +265,7 @@ void Tony_RS485::checkSerial(void)
 	//while there is more data in the UART than when last checked
 	while(RS485.available()> _len)
 	{
-		//Serial.println(_len);   
+		//Serial.println(_len); 		
 		_len = RS485.available();
 		//Wait for 3 bytewidths of data (SOM/EOM)
 		delay(_frameDelay);

@@ -24,10 +24,10 @@ class NBIoT_MQTT : public Stream
 	bool connected();
 	void (*callback)(String topic ,char *payload,size_t length);
 	//Stream Class 
-		virtual int read(){};	
-		virtual size_t write(uint8_t c){};
-		virtual int available(){};
-		virtual int peek(){}; 
+		virtual int read(){return 0;};	
+		virtual size_t write(uint8_t c){return 0;};
+		virtual int available(){return 0;};
+		virtual int peek(){return 0;}; 
 		virtual void flush(){};
 		using Stream::write; // make the other overloads of write visible
 

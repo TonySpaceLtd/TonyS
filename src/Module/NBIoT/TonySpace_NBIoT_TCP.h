@@ -18,7 +18,7 @@ class NBIoT_TCP : public Stream
 			head = 0;
 			tail = 0;
 		};
-		uint8_t createSocket(int port,bool receiveCtrl = false,bool ipv6= false);
+		int createSocket(int port,bool receiveCtrl = false,bool ipv6= false);
 		bool connect(String ip,int port);
 		
 		bool write(uint8_t *data,size_t length);
@@ -36,9 +36,9 @@ class NBIoT_TCP : public Stream
 		
 		//Stream Class 
 		virtual int read(){return tcpRead();};	
-		virtual size_t write(uint8_t c){};
+		virtual size_t write(uint8_t c){return 0;};
 		virtual int available(){return tcpAvailable();};
-		virtual int peek(){}; 
+		virtual int peek(){return 0;}; 
 		virtual void flush(){};
 		using Stream::write; // make the other overloads of write visible
 	

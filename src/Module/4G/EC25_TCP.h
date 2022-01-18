@@ -19,7 +19,7 @@ class EC25_TCP
 	bool stopSend();
 	int  writeBytes(const uint8_t *buf, size_t size);
 	int print(String str);
-	int println(String str){ print(str+"\r\n");  };
+	int println(String str){ return print(str+"\r\n");  };
 	int available();
 	int  read();
 	int  readBytes(uint8_t *buffer,size_t len);
