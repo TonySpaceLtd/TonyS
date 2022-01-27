@@ -2,16 +2,19 @@
 #include "TonyS_X1_ExternalModule.h"
 
 
+/*
+ Please enter information appeui , appkey (Not recommended for deveui)
+ */
 //---------------- Setting Parameter ----------------//
-String deveui = "";  // Such as "9c65f9fffe3f5874" ,  "" = Not edit (no change from the current value)
-String appeui = "";  // Such as "70b3d57ed0040d92" , "" = Not edit (no change from the current value)
-String appkey = "";  // Such as "6DCE2F2B00C4D24152BAAC4F072BFCD2" , "" = Not edit (no change from the current value)
+String deveui = "";                                  // Such as "9c65f9fffe3f4a33" ,  "" = Not edit (no change from the current value)
+String appeui = "0000000000000000";                  // Such as "0000000000000000" , "" = Not edit (no change from the current value)
+String appkey = "8124BB216C38DBA9B511613F1F508799";  // Such as "8124BB216C38DBA9B511613F1F508799" , "" = Not edit (no change from the current value)
 //--------------------------------------------------//
 
 uint16_t timeout = 0;
 char charbuff[18];   // char array buffer
 String stringbuff;   // string buffer
-String mydeveui = "9c65f9fffe3f5874";  // for test compare string data
+String mydeveui = "9c65f9fffe3f4a33";  // for test compare string data
   
 void setup() 
 {
@@ -105,9 +108,9 @@ void setup()
   Serial.println("Testing send the data to gateway...");
   timeout = 15000;
   String testdata = "6500224455667756"; //Please fill the data in pairs. Such as 10, 1020 or 102030  
-  /*                  (20 = Port, testdata = data for sending(String)) 
+  /*                  (5 = Port, testdata = data for sending(String)) 
                       Port 0-223 , Maximum data size = 64 byte      */
-  if(TonyLORA.stringWrite(20, testdata, timeout) == 1) // return 1 = successfully, 0 = fail
+  if(TonyLORA.stringWrite(5, testdata, timeout) == 1) // return 1 = successfully, 0 = fail
   {
     Serial.println("The data was sent to the gateway successfully");
   }

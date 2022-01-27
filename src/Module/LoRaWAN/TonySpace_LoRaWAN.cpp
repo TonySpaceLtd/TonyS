@@ -156,7 +156,7 @@ bool TONY_LORA::stringWrite(uint8_t port, String stringdata, uint16_t timeout)
 {
 	if(stringdata.length()<=512) // 64 Byte
     {
-		char buff[48];
+		char buff[200];
 		String buffstring = "";
 		port = constrain(port, 0, 223);
 		
