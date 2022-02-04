@@ -19,79 +19,66 @@ void Tony_RS485::slot(uint8_t slot)
 	switch(slot)
 	{
 		case  SLOT1 :
-			select_mode = IO0;
 			pin_RX = RX1;
 			pin_TX = TX1;
 			_uart_nr = 1;
 			break;
 		case  SLOT2 :
-			select_mode = IO2;
 			pin_RX = RX1;
 			pin_TX = TX1;
 			_uart_nr = 1;
 			break;
 		case  SLOT3 :
-			select_mode = IO4;
 			pin_RX = RX1;
 			pin_TX = TX1;
 			_uart_nr = 1;
 			break;
 		case  SLOT4 :
-			select_mode = IO6;
 			pin_RX = RX2;
 			pin_TX = TX2;
 			_uart_nr = 2;
 			break;
 		case  SLOT5 :
-			select_mode = IO8;
 			pin_RX = RX2;
 			pin_TX = TX2;
 			_uart_nr = 2;
 			break;
 		case  SLOT6 :
-			select_mode = IO10;
 			pin_RX = RX2;
 			pin_TX = TX2;
 			_uart_nr = 2;
 			break;
 		case  SLOT1_U :
-			select_mode = IO1;
 			pin_RX = RX1;
 			pin_TX = TX1;
 			_uart_nr = 1;
 			break;
 		case  SLOT2_U :
-			select_mode = IO3;
 			pin_RX = RX1;
 			pin_TX = TX1;
 			_uart_nr = 1;
 			break;
 		case  SLOT3_U :
-			select_mode = IO5;
 			pin_RX = RX1;
 			pin_TX = TX1;
 			_uart_nr = 1;
 			break;
 		case  SLOT4_U :
-			select_mode = IO7;
 			pin_RX = RX2;
 			pin_TX = TX2;
 			_uart_nr = 2;
 			break;
 		case  SLOT5_U :
-			select_mode = IO9;
 			pin_RX = RX2;
 			pin_TX = TX2;
 			_uart_nr = 2;
 			break;
 		case  SLOT6_U :
-			select_mode = IO11;
 			pin_RX = RX2;
 			pin_TX = TX2;
 			_uart_nr = 2;
 			break;
 	}	
-	Tony.pinMode(select_mode, OUTPUT);
 }
 
 
@@ -105,7 +92,10 @@ void Tony_RS485::begin(unsigned long baud)
 	
 	_baud = baud;
 	//calculate the time perdiod for 3 characters for the given bps in ms.
-	_frameDelay = 24000/_baud;
+	uint32_t T3_5 = 0;
+	if (_baud > 19200) T3_5 = 1750; 
+	else T3_5 = 35000000; 
+	_frameDelay = T3_5/_baud;
 	
     if(0 > _uart_nr || _uart_nr > 2) {
         log_e("Serial number is invalid, please use 0, 1 or 2");
@@ -199,11 +189,10 @@ int Tony_RS485::peek(void)
 
 int Tony_RS485::read(void)
 {
-	Tony.digitalWrite(select_mode, 0);
     if(available()) {
         return uartRead(_uart);
     }
-	delayMicroseconds(1);
+	//delayMicroseconds(1);
     return -1;
 }
 
@@ -214,35 +203,15 @@ void Tony_RS485::flush()
 
 size_t Tony_RS485::write(uint8_t c)
 {
-	if (modeRTU == 0) 
-	{
-		Tony.digitalWrite(select_mode, 1);
-		uartWrite(_uart, c);
-		delayMicroseconds(2000);
-		Tony.digitalWrite(select_mode, 0);
-	}
-	else
-	{
-		uartWrite(_uart, c);
-		delayMicroseconds(2000);
-	}
+	uartWrite(_uart, c);
+	//delayMicroseconds(2000);
     return 1;
 }
 
 size_t Tony_RS485::write(const uint8_t *buffer, size_t size)
 {
-	if (modeRTU == 0) 
-	{
-		Tony.digitalWrite(select_mode, 1);
-		uartWriteBuf(_uart, buffer, size);
-		delayMicroseconds(2000);
-		Tony.digitalWrite(select_mode, 0);
-	}
-	else
-	{
-		uartWriteBuf(_uart, buffer, size);
-		delayMicroseconds(2000);
-	}
+	uartWriteBuf(_uart, buffer, size);
+	//delayMicroseconds(2000);
     return size;
 }
 uint32_t  Tony_RS485::baudRate()
@@ -263,7 +232,7 @@ void Tony_RS485::checkSerial(void)
 		//Serial.println(_len);   
 		_len = RS485.available();
 		//Wait for 3 bytewidths of data (SOM/EOM)
-		delay(_frameDelay);
+		//delayMicroseconds(_frameDelay);
 		//Check the UART again
 	}  
 }
@@ -271,26 +240,78 @@ void Tony_RS485::checkSerial(void)
 /*
 Copies the contents of the UART to a buffer
 */
-void Tony_RS485::serialRx(void)
+void Tony_RS485::serialRx(byte slave_id,uint8_t start_addr, uint8_t end_addr)
 {
+	uint16_t crc = 0xFFFF;
 	byte i;
+	byte data_buffer = 0;
+	uint8_t count_data = 0;
+	bool first_data = 0;
+	bool start_read = 0;
+	free(_data);
+	_data = (byte*) malloc((((end_addr-start_addr)*2)+6) * sizeof(byte));
 	
-	for (i=0 ; i < _len ; i++)
+	if(_len>2)
 	{
-	   _data[i] = RS485.read();
+		for (i=0 ; i < _len ; i++)
+		{
+			data_buffer = RS485.read();
+			
+			if(start_read == 1)
+			{
+				_data[count_data] = data_buffer;
+				count_data++;
+			}
+			
+			if(data_buffer == slave_id && start_read == 0)
+			{
+				_data[count_data] = data_buffer;
+				start_read = 1;
+				count_data++;
+			}
+		}
+		
+		for (int position = 0; position < count_data-2; position++) {
+			crc ^= (uint16_t)_data[position];          // XOR byte into least sig. byte of crc
+	  
+			for (int i = 8; i != 0; i--) {    // Loop over each bit
+			if ((crc & 0x0001) != 0) {      // If the LSB is set
+				crc >>= 1;                    // Shift right and XOR 0xA001
+				crc ^= 0xA001;
+			}
+			else                            // Else LSB is not set
+			crc >>= 1;                    // Just shift right
+			}
+		}	
+		 // Serial.print("CRC : ");
+		 // Serial.println(crc, HEX);
 	}
+	 // Serial.print("Len : ");
+	 // Serial.println(_len);
+	uint32_t check_crc = _data[count_data-1];
+	check_crc <<= 8;
+	check_crc = check_crc+_data[count_data-2];
+	 // Serial.print("CHECK CRC : ");
+	 // Serial.println(check_crc, HEX);
+	if(crc != check_crc || _len != count_data) _len = 0;//memset(_data, 0, sizeof(_data));
 }
 
 byte Tony_RS485::readByte(uint8_t byteNumber)
 {
-	if(byteNumber <= _len)
-	{
-		return (_data[byteNumber]);
+	if(byteNumber <= _len) return (_data[byteNumber]);
+	else return 0;
+}
+
+uint16_t Tony_RS485::readRegister(uint8_t address)
+{
+	if(address <= _len)
+	{	
+		uint16_t data_buff = _data[((address*2)+3)]; 
+		data_buff <<= 8;
+		data_buff = data_buff + _data[(address*2)+4];
+		return data_buff;
 	}
-	else
-	{
-		return 0;
-	}
+	else return 0;
 }
 
 uint16_t Tony_RS485::get_byteNumber(void)
@@ -298,14 +319,34 @@ uint16_t Tony_RS485::get_byteNumber(void)
 	return _len;
 }
 
+bool Tony_RS485::write_singleCoil(uint8_t slave_ID, uint16_t address, bool value)
+{
+	if(value == 1) 
+	{ 
+		for(uint8_t i=0; i<9; i++)
+		{			
+			if(requestData(slave_ID, 5, address, 65280)) return 1; // 65280 = 0xFF00
+			delay(100);
+		}
+		return 0;
+	}
+	else 
+	{
+		for(uint8_t i=0; i<9; i++)
+		{			
+			if(requestData(slave_ID, 5, address, 0)) return 1;
+			delay(100);
+		}
+		return 0;
+	}
+}
+
 bool Tony_RS485::requestData(uint8_t slave_ID, uint8_t function, uint16_t startAddress, uint16_t numberData)
 {
 	uint16_t crc = 0xFFFF;
 	byte sendByte[8];
-	slaveID = slave_ID;
-	modeRTU = 1;
 	
-	sendByte[0] = slaveID;
+	sendByte[0] = slave_ID;
 	sendByte[1] = function;
 	sendByte[2] = startAddress>>8;
 	sendByte[3] = startAddress;
@@ -327,15 +368,8 @@ bool Tony_RS485::requestData(uint8_t slave_ID, uint8_t function, uint16_t startA
 	sendByte[6] = crc;
 	sendByte[7] = crc>>8;
 	
-	Tony.digitalWrite(select_mode, 1);
-	for(uint8_t i = 0 ; i < 8 ; i++)
-	{
-		RS485.write(sendByte[i]);
-		//delay(2);
-	}
-	delay(16);
-	Tony.digitalWrite(select_mode, 0);
-	modeRTU = 0;
+	for(uint8_t i = 0 ; i < 8 ; i++) RS485.write(sendByte[i]);
+	delayMicroseconds(_frameDelay);
 	
 	//initialize mesasge length
 	_len = 0;
@@ -349,9 +383,9 @@ bool Tony_RS485::requestData(uint8_t slave_ID, uint8_t function, uint16_t startA
 	{
 		return 0;
 	}
-	Serial.println("Reading...");   
+	//Serial.println("Reading...");   
 	//retrieve the query message from the serial uart
-	this->serialRx();
+	this->serialRx(slave_ID, startAddress, numberData);
 	//Serial.println("Done");   
 	return 1;
 }
