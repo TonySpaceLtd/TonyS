@@ -249,7 +249,7 @@ void Tony_RS485::serialRx(byte slave_id,uint8_t start_addr, uint8_t end_addr)
 	bool first_data = 0;
 	bool start_read = 0;
 	free(_data);
-	_data = (byte*) malloc((((end_addr-start_addr)*2)+6) * sizeof(byte));
+	_data = (byte*) malloc((((end_addr-start_addr)*2)+20) * sizeof(byte));
 	
 	if(_len>2)
 	{
