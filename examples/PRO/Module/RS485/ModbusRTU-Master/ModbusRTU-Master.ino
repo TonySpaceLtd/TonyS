@@ -43,7 +43,7 @@ void loop()
 
   //-------- Reading register ---------
   uint16_t read_reg = 0;
-  uint8_t addr = 2;
+  uint16_t addr = 2;
   if(getByteNumber > 1) 
   {
     read_reg = RS485.readRegister(addr);  // Read data from address  2 (16bit)
