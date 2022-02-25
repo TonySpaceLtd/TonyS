@@ -240,7 +240,7 @@ void Tony_RS485::checkSerial(void)
 /*
 Copies the contents of the UART to a buffer
 */
-void Tony_RS485::serialRx(byte slave_id,uint8_t start_addr, uint8_t end_addr)
+void Tony_RS485::serialRx(byte slave_id,uint16_t start_addr, uint16_t end_addr)
 {
 	uint16_t crc = 0xFFFF;
 	byte i;
@@ -248,8 +248,6 @@ void Tony_RS485::serialRx(byte slave_id,uint8_t start_addr, uint8_t end_addr)
 	uint8_t count_data = 0;
 	bool first_data = 0;
 	bool start_read = 0;
-	free(_data);
-	_data = (byte*) malloc((((end_addr-start_addr)*2)+20) * sizeof(byte));
 	
 	if(_len>2)
 	{
@@ -302,13 +300,13 @@ byte Tony_RS485::readByte(uint8_t byteNumber)
 	else return 0;
 }
 
-uint16_t Tony_RS485::readRegister(uint8_t address)
+uint16_t Tony_RS485::readRegister(uint16_t address)
 {
-	if(address <= _len)
+	if((address-start_address) <= _len)
 	{	
-		uint16_t data_buff = _data[((address*2)+3)]; 
+		uint16_t data_buff = _data[(((address-start_address)*2)+3)]; 
 		data_buff <<= 8;
-		data_buff = data_buff + _data[(address*2)+4];
+		data_buff = data_buff + _data[((address-start_address)*2)+4];
 		return data_buff;
 	}
 	else return 0;
@@ -345,6 +343,7 @@ bool Tony_RS485::requestData(uint8_t slave_ID, uint8_t function, uint16_t startA
 {
 	uint16_t crc = 0xFFFF;
 	byte sendByte[8];
+	start_address = startAddress;
 	
 	sendByte[0] = slave_ID;
 	sendByte[1] = function;
@@ -352,6 +351,7 @@ bool Tony_RS485::requestData(uint8_t slave_ID, uint8_t function, uint16_t startA
 	sendByte[3] = startAddress;
 	sendByte[4] = numberData>>8;
 	sendByte[5] = numberData;
+	
 	
 	for (int position = 0; position < 6; position++) {
     crc ^= (uint16_t)sendByte[position];          // XOR byte into least sig. byte of crc
