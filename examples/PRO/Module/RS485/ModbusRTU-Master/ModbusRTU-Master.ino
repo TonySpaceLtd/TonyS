@@ -20,8 +20,8 @@ void loop()
   uint8_t getByteNumber = 0;
   bool statusRequest = 0;
   
-                //RS485.requestData(Slave ID, Function, Start Address, Number of Data);
-  statusRequest = RS485.requestData(1, 3, 0, 68);      //Return 1 = Sent success , and Return 0 = Not success
+                //RS485.requestData(Slave ID, Function, Start Address, Number of Data, Timeout);
+  statusRequest = RS485.requestData(1, 3, 0, 5, 1000);      //Return 1 = Sent success , and Return 0 = Not success
 
                 //RS485.get_byteNumber() = Get number of Data
   getByteNumber = RS485.get_byteNumber();
@@ -43,12 +43,15 @@ void loop()
 
   //-------- Reading register ---------
   uint16_t read_reg = 0;
-  uint16_t addr = 2;
   if(getByteNumber > 1) 
   {
-    read_reg = RS485.readRegister(addr);  // Read data from address  2 (16bit)
-    Serial.print("Read from address ");
-    Serial.print(addr);
+    read_reg = RS485.readRegister(2);  // Read data from address  2 (2 Byte)
+    Serial.print("Read from address 2");
+    Serial.print(" : 0x");
+    Serial.println(read_reg,HEX);
+	
+	read_reg = RS485.readRegister(3);  // Read data from address  3 (2 Byte)
+    Serial.print("Read from address 3");
     Serial.print(" : 0x");
     Serial.println(read_reg,HEX);
   }

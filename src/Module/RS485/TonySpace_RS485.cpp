@@ -224,17 +224,18 @@ Tony_RS485::operator bool() const
     return true;
 }
 
-void Tony_RS485::checkSerial(void)
+uint16_t Tony_RS485::checkSerial(void)
 {
 	//while there is more data in the UART than when last checked
 	while(RS485.available()> _len)
 	{
-		//Serial.println(_len);   
 		_len = RS485.available();
 		//Wait for 3 bytewidths of data (SOM/EOM)
 		//delayMicroseconds(_frameDelay);
 		//Check the UART again
+		//Serial.println(_len);  
 	}  
+	return _len;
 }
 
 /*
@@ -323,23 +324,29 @@ bool Tony_RS485::write_singleCoil(uint8_t slave_ID, uint16_t address, bool value
 	{ 
 		for(uint8_t i=0; i<9; i++)
 		{			
-			if(requestData(slave_ID, 5, address, 65280)) return 1; // 65280 = 0xFF00
+			if(requestData(slave_ID, 5, address, 65280, 10)) return 1; // 65280 = 0xFF00
 			delay(100);
 		}
-		return 0;
+		return 0; 
 	}
 	else 
 	{
 		for(uint8_t i=0; i<9; i++)
 		{			
-			if(requestData(slave_ID, 5, address, 0)) return 1;
+			if(requestData(slave_ID, 5, address, 0, 10)) return 1;
 			delay(100);
 		}
 		return 0;
 	}
 }
 
-bool Tony_RS485::requestData(uint8_t slave_ID, uint8_t function, uint16_t startAddress, uint16_t numberData)
+bool Tony_RS485::isReady()
+{
+	if(RS485.read()>1) return 0;
+	else return 1;
+}
+
+bool Tony_RS485::requestData(uint8_t slave_ID, uint8_t function, uint16_t startAddress, uint16_t numberData, uint16_t timeout)
 {
 	uint16_t crc = 0xFFFF;
 	byte sendByte[8];
@@ -352,6 +359,8 @@ bool Tony_RS485::requestData(uint8_t slave_ID, uint8_t function, uint16_t startA
 	sendByte[4] = numberData>>8;
 	sendByte[5] = numberData;
 	
+	while(RS485.isReady() != 1);
+	memset(_data, 0, 257);
 	
 	for (int position = 0; position < 6; position++) {
     crc ^= (uint16_t)sendByte[position];          // XOR byte into least sig. byte of crc
@@ -375,17 +384,17 @@ bool Tony_RS485::requestData(uint8_t slave_ID, uint8_t function, uint16_t startA
 	_len = 0;
 	//Serial.println("Checking Serial");       
 	//check for data in the recieve buffer
-	this->checkSerial();
-    //Serial.println("Checked");    
-	
-	//if there is nothing in the recieve buffer, bail.
-	if(_len == 0)
+	uint32_t start_time = millis();
+	while(checkSerial() < (5+(numberData*2)))
 	{
-		return 0;
+		uint32_t current_time = millis() - start_time; 
+		if(current_time >= timeout) return 0;
+		delay(100);
 	}
+		
 	//Serial.println("Reading...");   
 	//retrieve the query message from the serial uart
-	this->serialRx(slave_ID, startAddress, numberData);
+	serialRx(slave_ID, startAddress, numberData);
 	//Serial.println("Done");   
 	return 1;
 }
