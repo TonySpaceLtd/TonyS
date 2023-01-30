@@ -7,6 +7,7 @@
 
 //include Onboard Library
 #include "Onboard/TonySpace_MAX11301.h"
+#include "Onboard/TonySpace_MAX11300.h"
 #include "Onboard/TonySpace_Pins.h"
 #include "Onboard/TonySpace_IO.h"
 #include "Onboard/RTClib/RTClib.h"
@@ -35,6 +36,7 @@
 #define UNKNOWN_MODEL      0x00
 #define PRO_MODEL          0x01
 #define BASIC_MODEL        0x02
+#define PRO_MODEL2         0x03
 
 class TonyS_X1
 {
@@ -67,7 +69,7 @@ public:
 	void handleData(uint8_t pin);
 	 
 	HardwareSerial SerialBegin(uint8_t slot,unsigned long baud,uint32_t config=SERIAL_8N1, int8_t rxPin=-1, int8_t txPin=-1, bool invert=false, unsigned long timeout_ms = 20000UL); //Serial
-	
+	void SerialBegin(HardwareSerial *uart,uint8_t slot,unsigned long baud, uint32_t config=SERIAL_8N1);
 private:
 	
 };

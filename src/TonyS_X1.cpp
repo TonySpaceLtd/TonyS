@@ -11,6 +11,7 @@ TonyS_X1::TonyS_X1()
 }
 
 MAX11301 MAX11301;
+MAX11300 MAX11300;
 TonySpace_IO IO;
 
 byte workingDevice = 0x00;
@@ -43,17 +44,29 @@ bool TonyS_X1::begin()
 			{
 				pinStatus[i] = modeGPI;
 			}
+			Tony.pinMode(IO15, OUTPUT); //----  Set Pin IO14 (Relay 1) to OUTPUT
+			Tony.pinMode(IO16, OUTPUT); //----  Set Pin IO15 (Relay 2) to OUTPUT
+			Tony.digitalWrite(IO15, LOW); //---- Write LOW to pin IO14 (Relay 1)
+			Tony.digitalWrite(IO16, LOW); //---- Write LOW to pin IO15 (Relay 2)
 		}
-		Tony.pinMode(IO15, OUTPUT); //----  Set Pin IO14 (Relay 1) to OUTPUT
-		Tony.pinMode(IO16, OUTPUT); //----  Set Pin IO15 (Relay 2) to OUTPUT
-		Tony.digitalWrite(IO15, LOW); //---- Write LOW to pin IO14 (Relay 1)
-		Tony.digitalWrite(IO16, LOW); //---- Write LOW to pin IO15 (Relay 2)
+		if (board_model == PRO_MODEL2)
+		{
+			check_results = MAX11300.Config_deviceControl(); 
+			// Set MAX11301 to default pin mode 
+			for(uint8_t i=0; i<20; i++)
+			{
+				pinStatus[i] = modeGPI;
+			}
+			
+		}			
+		
 	}
 	return check_results;
 }
 
 void TonyS_X1::pinMode(uint8_t pin, uint16_t type)
 {
+	
 	if(pin >= 100)   
 	{	
 		if (board_model == PRO_MODEL) 
@@ -104,6 +117,54 @@ void TonyS_X1::pinMode(uint8_t pin, uint16_t type)
 				Serial.println("Please select only pin IO0, IO1, IO2, IO3, IO10 and IO11.");
 			}
 		}
+		else if (board_model == PRO_MODEL2)
+		{
+			if(!ismax_rdy())
+			{
+				Serial.println();
+				Serial.println("MAX11301 not available !.");
+				Serial.println("Please select only pin IO0, IO1, IO2, IO3, IO10 and IO11.");
+				return;
+			}
+			switch(type)
+				{
+					case INPUT:
+					{
+						MAX11300.Basic_Config_Port_For_GPI(pin, 0xfff); //Threshold ‭‭4095 ‬= 2.5V  , 0xfff = 2.5V(MAX)
+						pinStatus[pin] = modeGPI;
+						break;
+					}
+					case OUTPUT: 					
+					{
+						MAX11300.Basic_Config_Port_For_GPO(pin, 1352); //Logic's ouput 1352 = 3.3V  
+						pinStatus[pin] = modeGPO;
+						break;
+					}
+					case INPUT_PULLUP:
+					{
+						Serial.println();
+						Serial.println("This pin not support INPUT_PULLUP mode.");
+						Serial.println("Please select only pin IO0, IO1, IO2, IO3, IO10 and IO11.");
+						break;
+					}
+					case ADC2V5:
+					{
+						MAX11300.Basic_Config_Port(pin, ADCtype2);  // Config Port (pin) to ADC 0-10V	 
+						pinStatus[pin] = modeADC;
+						break;
+					}
+					case ADC10V:
+					{
+						MAX11300.Basic_Config_Port(pin, ADCtype1);  // Config Port (pin) to ADC 0-10V
+						pinStatus[pin] = modeADC;
+						break;
+					}
+					default:
+					break;
+				}
+				
+			
+		}
 		else if (board_model == BASIC_MODEL) 
 		{
 			if(isstm_rdy())
@@ -133,6 +194,8 @@ void TonyS_X1::pinMode(uint8_t pin, uint16_t type)
 	}
 }
 
+
+
 void TonyS_X1::digitalWrite(uint8_t pin, bool value)
 {
 	if(pin >= 100)
@@ -146,6 +209,17 @@ void TonyS_X1::digitalWrite(uint8_t pin, bool value)
 			else
 			{
 				MAX11301.write_speedGPO(pin, 0); 
+			}
+		}
+		else if (board_model == PRO_MODEL2) 
+		{
+			if(value == 1)
+			{
+				MAX11300.write_speedGPO(pin, 1); 
+			}
+			else
+			{
+				MAX11300.write_speedGPO(pin, 0); 
 			}
 		}
 		else if (board_model == BASIC_MODEL) 
@@ -177,6 +251,17 @@ void TonyS_X1::digitalnormalWrite(uint8_t pin, bool value)
 				MAX11301.writeGPO(pin, 0); 
 			}
 		}	
+		if (board_model == PRO_MODEL2) 
+		{
+			if(value == 1)
+			{
+				MAX11300.writeGPO(pin, 1);  
+			}
+			else
+			{
+				MAX11300.writeGPO(pin, 0); 
+			}
+		}	
 	}
 	else
 	{
@@ -192,6 +277,10 @@ bool TonyS_X1::digitalRead(uint8_t pin)
 		if (board_model == PRO_MODEL) 
 		{
 			value = MAX11301.readGPI(pin);
+		}
+		else if (board_model == PRO_MODEL2) 
+		{
+			value = MAX11300.readGPI(pin);
 		}
 		else if (board_model == BASIC_MODEL) 
 		{
@@ -225,6 +314,23 @@ uint16_t TonyS_X1::analogRead(uint8_t pin)
 				pinStatus[pin] = modeADC;
 			}
 		}
+		else if (board_model == PRO_MODEL2) 
+		{
+			
+			if(pinStatus[pin] == modeADC)
+			{
+				
+				dataADC = MAX11300.readADC(pin);  // Read ADC from port (pin) 
+			}
+			else
+			{
+				Serial.println("read2");
+				MAX11300.Basic_Config_Port(pin, ADCtype1);  // Config Port (pin) to ADC 0-10V
+				dataADC = MAX11300.readADC(pin);  // Read ADC from port (pin) 
+				pinStatus[pin] = modeADC;
+			}
+		}
+		
 		else if (board_model == BASIC_MODEL) 
 		{
 			pin = constrain(pin, 0, 11);
@@ -253,6 +359,20 @@ void TonyS_X1::analogWrite(uint8_t pin, uint16_t Output)
 			pinStatus[pin] = modeDAC;
 		}
 	}
+	else if (board_model == PRO_MODEL2) 
+	{
+		if(pinStatus[pin] == modeDAC)
+		{
+			MAX11300.writeDAC(pin, Output);  //Output 0-4095
+		}
+		else
+		{
+			MAX11300.Basic_Config_Port(pin, DACtype); 
+			MAX11300.writeDAC(pin, Output);  //Output 0-4095
+			pinStatus[pin] = modeDAC;
+		}
+	}
+	
 	else if (board_model == BASIC_MODEL) Serial.println("Please use the PRO version");
 }
 
@@ -298,13 +418,26 @@ void TonyS_X1::checkIC()
 	}
 	else
 	{
-		Wire.beginTransmission(ADDR_STM32);
-		error = Wire.endTransmission();
-		if(error == 0)
+		SPI.begin();
+		//MAX11300.beginSPI();
+		pinMode(SEL_CS_MAX3100,OUTPUT);
+		pinMode(IO_CS,OUTPUT);
+		uint16_t id = MAX11300.getDeviceID();
+		if(id == MAX11300_DEV_ID)
 		{
-			board_model = BASIC_MODEL;
-			workingDevice |= 0x01;
-		}	
+			board_model = PRO_MODEL2;
+		   workingDevice |= 0x01;
+		}
+		else
+		{
+			Wire.beginTransmission(ADDR_STM32);
+			error = Wire.endTransmission();
+			if(error == 0)
+			{
+				board_model = BASIC_MODEL;
+				workingDevice |= 0x01;
+			}	
+		}
 	}
 	delay(10);
 	Serial.println();
@@ -337,6 +470,20 @@ void TonyS_X1::checkIC()
 		Serial.print(F("RTC(MCP7940) =  "));
 		Serial.println(((workingDevice & 0x10) == 0x10)? "ON":"OFF");
 	}
+	else if (board_model == PRO_MODEL2) 
+	{
+		Wire.beginTransmission(ADDR_DS3231);
+		error = Wire.endTransmission();
+		if(error == 0)
+		{
+			workingDevice |= 0x10;
+		}
+		Serial.println("MODEL        =  PRO2");
+		Serial.print(F("MAX11300     =  "));
+		Serial.println(((workingDevice & 0x01) == 0x01)? "ON":"OFF");
+		Serial.print(F("RTC(DS3231)  =  "));
+		Serial.println(((workingDevice & 0x10) == 0x10)? "ON":"OFF");
+	}
 	else Serial.println("MODEL        =  NON DETECTED");
 }
 
@@ -357,6 +504,16 @@ bool TonyS_X1::ismax_rdy()
 			workingDevice |= 0x01;
 			return(true);
 		}
+		else
+		{
+			uint16_t id = MAX11300.getDeviceID();
+			if(id == MAX11300_DEV_ID)
+			{
+				workingDevice |= 0x01;
+				return(true);
+			}
+		}
+		
 	}
 	return(false);
 }
@@ -488,15 +645,34 @@ void TonyS_X1::handleData(uint8_t pin)
 
 
 HardwareSerial TonyS_X1:: SerialBegin(uint8_t slot,unsigned long baud, uint32_t config, int8_t rxPin, int8_t txPin, bool invert, unsigned long timeout_ms) 
-{		
+{	
+
 	if(slot==SLOT1 || slot==SLOT1_U || slot==SLOT2 || slot==SLOT2_U || slot==SLOT3 || slot==SLOT3_U)
 	{
-		Serial1.begin(baud,config,RX1,TX1,invert,timeout_ms);
+		//Serial1.begin(baud,config,RX1,TX1,invert,timeout_ms);
+		Serial1.begin(baud,config,RX1,TX1);
 		return(Serial1);
 	}
 	else if(slot==SLOT4 || slot==SLOT4_U || slot==SLOT5 || slot==SLOT5_U || slot==SLOT6 || slot==SLOT6_U)
 	{
-		Serial2.begin(baud,config,RX2,TX2,invert,timeout_ms);
+		//Serial2.begin(baud,config,RX2,TX2,invert,timeout_ms);
+		Serial2.begin(baud,config,RX2,TX2);
 		return(Serial2);
+	}
+	return Serial1;
+}
+void TonyS_X1:: SerialBegin(HardwareSerial *uart,uint8_t slot,unsigned long baud, uint32_t config)
+{
+	if(slot==SLOT1 || slot==SLOT1_U || slot==SLOT2 || slot==SLOT2_U || slot==SLOT3 || slot==SLOT3_U)
+	{
+		//Serial1.begin(baud,config,RX1,TX1,invert,timeout_ms);
+		Serial1.begin(baud,config,RX1,TX1);
+		*uart = Serial1; 
+	}
+	else if(slot==SLOT4 || slot==SLOT4_U || slot==SLOT5 || slot==SLOT5_U || slot==SLOT6 || slot==SLOT6_U)
+	{
+		//Serial2.begin(baud,config,RX2,TX2,invert,timeout_ms);
+		Serial2.begin(baud,config,RX2,TX2);
+		*uart = Serial2;
 	}
 }
