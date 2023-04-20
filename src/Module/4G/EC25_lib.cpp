@@ -8,7 +8,7 @@ EC25::EC25()
 }
 void EC25::initial(uint8_t slot)
 {
-	if(slot>=SLOT1&&slot<=SLOT4_U)
+	if(slot>=SLOT1&&slot<=SLOT6_U)
 	{
 		powerPin = getPinIO[slot];
 		Tony.pinMode(powerPin,OUTPUT);
@@ -68,16 +68,21 @@ String EC25::getIMEI()
 String EC25::getCIMI()
 {
 	String str_="ERROR";
-	ECser.sendAT(F("AT+CIMI"));
-	EC_Resp res = ECser.waitString(F("OK"));
-	if(res.id==0)
+	for(uint8_t i=0;i<5;i++)
 	{
-		String out = removeChar(res.temp,0x0A);
-		res.temp = out;
-		out = removeChar(res.temp,'O');
-		res.temp = out;
-		out = removeChar(res.temp,'K');
-		str_ = out;//res.temp;
+		ECser.sendAT(F("AT+CIMI"));
+		EC_Resp res = ECser.waitString(F("OK"));
+		if(res.id==0)
+		{
+			String out = removeChar(res.temp,0x0A);
+			res.temp = out;
+			out = removeChar(res.temp,'O');
+			res.temp = out;
+			out = removeChar(res.temp,'K');
+			str_ = out;//res.temp;
+			return(str_);
+		}
+		delay(200);
 	}
 	return(str_);
 }

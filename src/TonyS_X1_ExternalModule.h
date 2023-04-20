@@ -43,6 +43,7 @@
 #include "Module/4G/EC25_LineNotify.h"
 #include "Module/4G/EC25_HTTP.h"
 #include "Module/4G/EC25_FILE.h"
+#include "Module/4G/EC25_OTA.h"
 
 #include "Module/Maxsonar/TonySpace_Maxsonar.h"
 

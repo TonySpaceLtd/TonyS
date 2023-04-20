@@ -117,7 +117,8 @@ size_t EC25_FILE::read(int handle,uint8_t *buf,size_t length)
 	{
 		int indx = res.data.indexOf(" ");
 		s	= res.data.substring(indx).toInt();
-		LTE.ECser.read(); //clear \r\n 
+		//LTE.ECser.read(); //clear \r\n 
+		LTE.ECser.readStringUntil(0x0A);
 		LTE.ECser.readBytes(buf,s);
 	}
 	LTE.ECser.waitString("OK",2000);

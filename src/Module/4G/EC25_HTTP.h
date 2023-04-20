@@ -16,7 +16,10 @@ class EC25_HTTP
 	EC25_HTTP();
 	bool setURL(String url,bool respHeader=false);
 	int get();
+	size_t respSize();
 	size_t read(uint8_t *data,size_t buffSize);
+	bool clearMemory();
+	int  post(uint8_t *data,size_t len);
 	void (*callback)(uint8_t *data,size_t size,bool finish);
 	private:
 		EC25_FILE httpFile;
